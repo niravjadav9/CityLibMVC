@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="4cf9cc33bbb745e2a634d64e54e5b395" Name="Diagram1">
+        <EntityTypeShape EntityType="LiberaryManagementModel.admin" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="LiberaryManagementModel.author" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="LiberaryManagementModel.book" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="LiberaryManagementModel.bookinfo" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="LiberaryManagementModel.borrow" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="LiberaryManagementModel.branch" Width="1.5" PointX="4.75" PointY="3.75" />
+        <EntityTypeShape EntityType="LiberaryManagementModel.copy" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="LiberaryManagementModel.location" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="LiberaryManagementModel.publisher" Width="1.5" PointX="2.75" PointY="6.75" />
+        <EntityTypeShape EntityType="LiberaryManagementModel.reader" Width="1.5" PointX="6.75" PointY="3.75" />
+        <EntityTypeShape EntityType="LiberaryManagementModel.reserve" Width="1.5" PointX="4.75" PointY="6.75" />
+        <EntityTypeShape EntityType="LiberaryManagementModel.sysdiagrams" Width="1.5" PointX="6.75" PointY="6.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

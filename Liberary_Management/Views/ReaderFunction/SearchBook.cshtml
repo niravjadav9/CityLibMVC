@@ -1,0 +1,80 @@
+﻿@model System.Collections.Generic.List<Liberary_Management.SearchBookBy_Result>
+
+@{
+    var filterOptions = new List<SelectListItem>();
+    filterOptions.Add(new SelectListItem { Text = "ID", Value = "1", Selected = true });
+    filterOptions.Add(new SelectListItem { Text = "Title", Value = "2" });
+    filterOptions.Add(new SelectListItem { Text = "Publisher", Value = "3" });
+}
+
+<div class="form-group row flex-v-center">
+    <div class="col-xs-3 col-sm-2">
+        <label for="from">Search book by</label>
+    </div>
+    <div class="col-xs-3">
+        <p class="input-group">
+            @Html.DropDownList("BookSearchOption", filterOptions, new { @class = "form-control", @id = "drpBookSearchOption" })
+        </p>
+        </div>
+    <div class="col-xs-3">
+        <p class="input-group">
+            <input type="text" name="txtSearch" id="txtSearch" />
+        </p>
+    </div>
+    <div class="col-xs-1 text-center">
+        <input type="button" class="btn btn-default" value="Search" id="btnSearchBooks" />
+    </div>
+</div>
+
+<div class="row" id="divResult">
+    <table class="table table-condensed" id="tblSearchResult">
+
+    </table>
+</div>
+
+<script>
+    $('#btnSearchBooks').click(function () {
+        var optionValue = $('#drpBookSearchOption').val();
+        var searchValue = $('#txtSearch').val();
+        var strData = { option: optionValue, data: searchValue };
+        var siteURL = '@Url.Action("SearchByBook", "ReaderFunction")';
+        
+        callbackSuccess = function (response) {
+            debugger;
+            $('#tblSearchResult').html('');
+            if (response.length > 0) {
+                $(function () {
+                    var $th = $('<tr>').append(
+                        $('<th>').text('Book ID'),
+                        $('<th>').text('ISBN'),
+                        $('<th>').text('Book Title'),
+                        $('<th>').text('Author Name'),
+                        $('<th>').text('Publisher Name'),
+                        $('<th>').text('Publication Date'),
+                    ).appendTo('#tblSearchResult');
+
+                    $.each(response, function (i, item) {
+                        var $tr = $('<tr>').append(
+                            $('<td>').text(item.BookId),
+                            $('<td>').text(item.ISBN),
+                            $('<td>').text(item.BookTitle),
+                            $('<td>').text(item.AuthorName),
+                            $('<td>').text(item.PublisherName),
+                            $('<td>').text(item.PublicationDate)
+                        ).appendTo('#tblSearchResult');
+                    });
+                });
+            } else {
+                $(function () {
+                    $('#divResult').html('<h1>No Records Found!</h1>');
+                });
+            }
+        }
+
+        callbackError = function (response) {
+            console.error(response);
+        }
+
+        ajaxPOST(siteURL, strData, callbackSuccess, 'Reader Function', callbackError);
+    });
+</script>
