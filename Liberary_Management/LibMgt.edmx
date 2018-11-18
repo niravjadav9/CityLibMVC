@@ -35,6 +35,8 @@
           <Property Name="publisherid" Type="int" Nullable="false" />
           <Property Name="publicationdate" Type="date" Nullable="false" />
           <Property Name="authorid" Type="int" Nullable="false" />
+          <Property Name="branchid" Type="int" />
+          <Property Name="position" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="borrow">
           <Key>
@@ -102,51 +104,35 @@
           <Property Name="bookid" Type="int" Nullable="false" />
           <Property Name="date" Type="date" Nullable="false" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
-        </EntityType>
-        <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Association Name="FK_BOOKINFO_BRANCH">
+          <End Role="branch" Type="Self.branch" Multiplicity="0..1" />
+          <End Role="bookinfo" Type="Self.bookinfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="branch">
+              <PropertyRef Name="branchid" />
+            </Principal>
+            <Dependent Role="bookinfo">
+              <PropertyRef Name="branchid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="SearchBookBy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="option" Type="int" Mode="In" />
           <Parameter Name="searchData" Type="varchar(max)" Mode="In" />
         </Function>
-        <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        <Function Name="SP_GetBookCopyForAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="option" Type="int" Mode="In" />
+          <Parameter Name="searchValue" Type="varchar(max)" Mode="In" />
         </Function>
-        <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="version" Type="int" Mode="In" />
-          <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+        <Function Name="SP_InsertBookCopy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="isbn" Type="varchar(max)" Mode="In" />
+          <Parameter Name="title" Type="varchar(max)" Mode="In" />
+          <Parameter Name="publisherid" Type="varchar(max)" Mode="In" />
+          <Parameter Name="author" Type="varchar(max)" Mode="In" />
+          <Parameter Name="publicationDate" Type="varchar(max)" Mode="In" />
+          <Parameter Name="branchid" Type="varchar(max)" Mode="In" />
+          <Parameter Name="position" Type="varchar(max)" Mode="In" />
         </Function>
-        <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-        </Function>
-        <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
-          <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
-          <Parameter Name="owner_id" Type="int" Mode="In" />
-          <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
-        </Function>
-        <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="LiberaryManagementModelStoreContainer">
           <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="author" EntityType="Self.author" Schema="dbo" store:Type="Tables" />
@@ -159,7 +145,10 @@
           <EntitySet Name="publisher" EntityType="Self.publisher" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="reader" EntityType="Self.reader" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="reserve" EntityType="Self.reserve" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_BOOKINFO_BRANCH" Association="Self.FK_BOOKINFO_BRANCH">
+            <End Role="branch" EntitySet="branch" />
+            <End Role="bookinfo" EntitySet="bookinfo" />
+          </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
@@ -169,7 +158,6 @@
           <EntitySet Name="admin" EntityType="LiberaryManagementModel.admin" />
           <EntitySet Name="author" EntityType="LiberaryManagementModel.author" />
           <EntitySet Name="book" EntityType="LiberaryManagementModel.book" />
-          <EntitySet Name="bookinfo" EntityType="LiberaryManagementModel.bookinfo" />
           <EntitySet Name="borrow" EntityType="LiberaryManagementModel.borrow" />
           <EntitySet Name="branch" EntityType="LiberaryManagementModel.branch" />
           <EntitySet Name="copy" EntityType="LiberaryManagementModel.copy" />
@@ -177,7 +165,6 @@
           <EntitySet Name="publisher" EntityType="LiberaryManagementModel.publisher" />
           <EntitySet Name="reader" EntityType="LiberaryManagementModel.reader" />
           <EntitySet Name="reserve" EntityType="LiberaryManagementModel.reserve" />
-          <EntitySet Name="sysdiagrams" EntityType="LiberaryManagementModel.sysdiagrams" />
           <FunctionImport Name="SearchBookBy" ReturnType="Collection(LiberaryManagementModel.SearchBookBy_Result)">
             <Parameter Name="option" Mode="In" Type="Int32" />
             <Parameter Name="searchData" Mode="In" Type="String" />
@@ -212,6 +199,41 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="SP_GetBookCopyForAdmin" ReturnType="Collection(LiberaryManagementModel.SP_GetBookCopyForAdmin_Result)">
+            <Parameter Name="option" Mode="In" Type="Int32" />
+            <Parameter Name="searchValue" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_InsertBookCopy">
+            <Parameter Name="isbn" Mode="In" Type="String" />
+            <Parameter Name="title" Mode="In" Type="String" />
+            <Parameter Name="publisherid" Mode="In" Type="String" />
+            <Parameter Name="author" Mode="In" Type="String" />
+            <Parameter Name="publicationDate" Mode="In" Type="String" />
+            <Parameter Name="branchid" Mode="In" Type="String" />
+            <Parameter Name="position" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SearchBookBy1" ReturnType="Collection(LiberaryManagementModel.SearchBookBy1_Result)">
+            <Parameter Name="option" Mode="In" Type="Int32" />
+            <Parameter Name="searchData" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_GetBookCopyForAdmin1" ReturnType="Collection(LiberaryManagementModel.SP_GetBookCopyForAdmin1_Result)">
+            <Parameter Name="option" Mode="In" Type="Int32" />
+            <Parameter Name="searchValue" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_InsertBookCopy1">
+            <Parameter Name="isbn" Mode="In" Type="String" />
+            <Parameter Name="title" Mode="In" Type="String" />
+            <Parameter Name="publisherid" Mode="In" Type="String" />
+            <Parameter Name="author" Mode="In" Type="String" />
+            <Parameter Name="publicationDate" Mode="In" Type="String" />
+            <Parameter Name="branchid" Mode="In" Type="String" />
+            <Parameter Name="position" Mode="In" Type="String" />
+          </FunctionImport>
+          <EntitySet Name="bookinfo" EntityType="LiberaryManagementModel.bookinfo" />
+          <AssociationSet Name="FK_BOOKINFO_BRANCH" Association="LiberaryManagementModel.FK_BOOKINFO_BRANCH">
+            <End Role="branch" EntitySet="branch" />
+            <End Role="bookinfo" EntitySet="bookinfo" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="admin">
           <Key>
@@ -234,16 +256,6 @@
           <Property Name="isbn" Type="String" Nullable="false" MaxLength="11" FixedLength="false" Unicode="false" />
           <Property Name="bookid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
         </EntityType>
-        <EntityType Name="bookinfo">
-          <Key>
-            <PropertyRef Name="isbn" />
-          </Key>
-          <Property Name="isbn" Type="String" Nullable="false" MaxLength="9" FixedLength="false" Unicode="false" />
-          <Property Name="title" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
-          <Property Name="publisherid" Type="Int32" Nullable="false" />
-          <Property Name="publicationdate" Type="DateTime" Nullable="false" Precision="0" />
-          <Property Name="authorid" Type="Int32" Nullable="false" />
-        </EntityType>
         <EntityType Name="borrow">
           <Key>
             <PropertyRef Name="bookid" />
@@ -264,7 +276,8 @@
           <Property Name="branchid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="location" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
-        </EntityType>
+          <NavigationProperty Name="bookinfo" Relationship="LiberaryManagementModel.FK_BOOKINFO_BRANCH" FromRole="branch" ToRole="bookinfo" />
+          </EntityType>
         <EntityType Name="copy">
           <Key>
             <PropertyRef Name="branchid" />
@@ -310,16 +323,6 @@
           <Property Name="bookid" Type="Int32" Nullable="false" />
           <Property Name="date" Type="DateTime" Nullable="false" Precision="0" />
         </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
-        </EntityType>
         <ComplexType Name="SearchBookBy_Result">
           <Property Type="Int32" Name="BookId" Nullable="true" />
           <Property Type="String" Name="ISBN" Nullable="false" MaxLength="9" />
@@ -339,6 +342,59 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
+        <ComplexType Name="SP_GetBookCopyForAdmin_Result">
+          <Property Type="Int32" Name="BookId" Nullable="true" />
+          <Property Type="String" Name="ISBN" Nullable="false" MaxLength="9" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="45" />
+          <Property Type="String" Name="AuthorName" Nullable="true" MaxLength="45" />
+          <Property Type="String" Name="Publishre" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="PublicationDate" Nullable="false" />
+          <Property Type="String" Name="BranchName" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Position" Nullable="true" />
+        </ComplexType>
+        <ComplexType Name="SearchBookBy1_Result">
+          <Property Type="Int32" Name="BookId" Nullable="false" />
+          <Property Type="String" Name="ISBN" Nullable="false" MaxLength="9" />
+          <Property Type="String" Name="BookTitle" Nullable="false" MaxLength="45" />
+          <Property Type="String" Name="AuthorName" Nullable="true" MaxLength="45" />
+          <Property Type="String" Name="PublisherName" Nullable="false" MaxLength="20" />
+          <Property Type="DateTime" Name="PublicationDate" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="SP_GetBookCopyForAdmin1_Result">
+          <Property Type="Int32" Name="BookId" Nullable="true" />
+          <Property Type="String" Name="ISBN" Nullable="false" MaxLength="9" />
+          <Property Type="String" Name="Title" Nullable="false" MaxLength="45" />
+          <Property Type="String" Name="AuthorName" Nullable="true" MaxLength="45" />
+          <Property Type="String" Name="Publishre" Nullable="true" MaxLength="20" />
+          <Property Type="DateTime" Name="PublicationDate" Nullable="false" />
+          <Property Type="String" Name="BranchName" Nullable="true" MaxLength="20" />
+          <Property Type="String" Name="Position" Nullable="true" />
+        </ComplexType>
+        <EntityType Name="bookinfo">
+          <Key>
+            <PropertyRef Name="isbn" />
+          </Key>
+          <Property Name="isbn" Type="String" Nullable="false" MaxLength="9" FixedLength="false" Unicode="false" />
+          <Property Name="title" Type="String" Nullable="false" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="publisherid" Type="Int32" Nullable="false" />
+          <Property Name="publicationdate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="authorid" Type="Int32" Nullable="false" />
+          <Property Name="branchid" Type="Int32" />
+          <Property Name="position" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="branch" Relationship="LiberaryManagementModel.FK_BOOKINFO_BRANCH" FromRole="bookinfo" ToRole="branch" />
+        </EntityType>
+        <Association Name="FK_BOOKINFO_BRANCH">
+          <End Type="LiberaryManagementModel.branch" Role="branch" Multiplicity="0..1" />
+          <End Type="LiberaryManagementModel.bookinfo" Role="bookinfo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="branch">
+              <PropertyRef Name="branchid" />
+            </Principal>
+            <Dependent Role="bookinfo">
+              <PropertyRef Name="branchid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -365,17 +421,6 @@
             <EntityTypeMapping TypeName="LiberaryManagementModel.book">
               <MappingFragment StoreEntitySet="book">
                 <ScalarProperty Name="bookid" ColumnName="bookid" />
-                <ScalarProperty Name="isbn" ColumnName="isbn" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="bookinfo">
-            <EntityTypeMapping TypeName="LiberaryManagementModel.bookinfo">
-              <MappingFragment StoreEntitySet="bookinfo">
-                <ScalarProperty Name="authorid" ColumnName="authorid" />
-                <ScalarProperty Name="publicationdate" ColumnName="publicationdate" />
-                <ScalarProperty Name="publisherid" ColumnName="publisherid" />
-                <ScalarProperty Name="title" ColumnName="title" />
                 <ScalarProperty Name="isbn" ColumnName="isbn" />
               </MappingFragment>
             </EntityTypeMapping>
@@ -447,54 +492,47 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams">
-            <EntityTypeMapping TypeName="LiberaryManagementModel.sysdiagrams">
-              <MappingFragment StoreEntitySet="sysdiagrams">
-                <ScalarProperty Name="definition" ColumnName="definition" />
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-                <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-                <ScalarProperty Name="name" ColumnName="name" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="SearchBookBy" FunctionName="LiberaryManagementModel.Store.SearchBookBy">
+          <FunctionImportMapping FunctionImportName="SearchBookBy1" FunctionName="LiberaryManagementModel.Store.SearchBookBy">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="LiberaryManagementModel.SearchBookBy_Result">
+              <ComplexTypeMapping TypeName="LiberaryManagementModel.SearchBookBy1_Result">
                 <ScalarProperty Name="BookId" ColumnName="BookId" />
                 <ScalarProperty Name="ISBN" ColumnName="ISBN" />
                 <ScalarProperty Name="BookTitle" ColumnName="BookTitle" />
                 <ScalarProperty Name="AuthorName" ColumnName="AuthorName" />
                 <ScalarProperty Name="PublisherName" ColumnName="PublisherName" />
+                <ScalarProperty Name="PublicationDate" ColumnName="PublicationDate" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_GetBookCopyForAdmin1" FunctionName="LiberaryManagementModel.Store.SP_GetBookCopyForAdmin">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LiberaryManagementModel.SP_GetBookCopyForAdmin1_Result">
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="AuthorName" ColumnName="AuthorName" />
+                <ScalarProperty Name="Publishre" ColumnName="Publishre" />
+                <ScalarProperty Name="PublicationDate" ColumnName="PublicationDate" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="Position" ColumnName="Position" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_InsertBookCopy1" FunctionName="LiberaryManagementModel.Store.SP_InsertBookCopy" />
+          <EntitySetMapping Name="bookinfo">
+            <EntityTypeMapping TypeName="LiberaryManagementModel.bookinfo">
+              <MappingFragment StoreEntitySet="bookinfo">
+                <ScalarProperty Name="position" ColumnName="position" />
+                <ScalarProperty Name="branchid" ColumnName="branchid" />
+                <ScalarProperty Name="authorid" ColumnName="authorid" />
                 <ScalarProperty Name="publicationdate" ColumnName="publicationdate" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_alterdiagram" FunctionName="LiberaryManagementModel.Store.sp_alterdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_creatediagram" FunctionName="LiberaryManagementModel.Store.sp_creatediagram" />
-          <FunctionImportMapping FunctionImportName="sp_dropdiagram" FunctionName="LiberaryManagementModel.Store.sp_dropdiagram" />
-          <FunctionImportMapping FunctionImportName="sp_helpdiagramdefinition" FunctionName="LiberaryManagementModel.Store.sp_helpdiagramdefinition">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="LiberaryManagementModel.sp_helpdiagramdefinition_Result">
-                <ScalarProperty Name="version" ColumnName="version" />
-                <ScalarProperty Name="definition" ColumnName="definition" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_helpdiagrams" FunctionName="LiberaryManagementModel.Store.sp_helpdiagrams">
-            <ResultMapping>
-              <ComplexTypeMapping TypeName="LiberaryManagementModel.sp_helpdiagrams_Result">
-                <ScalarProperty Name="Database" ColumnName="Database" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="ID" ColumnName="ID" />
-                <ScalarProperty Name="Owner" ColumnName="Owner" />
-                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
-              </ComplexTypeMapping>
-            </ResultMapping>
-          </FunctionImportMapping>
-          <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="LiberaryManagementModel.Store.sp_renamediagram" />
-          <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="LiberaryManagementModel.Store.sp_upgraddiagrams" />
-        </EntityContainerMapping>
+                <ScalarProperty Name="publisherid" ColumnName="publisherid" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="isbn" ColumnName="isbn" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
   </edmx:Runtime>

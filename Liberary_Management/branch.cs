@@ -14,8 +14,17 @@ namespace Liberary_Management
     
     public partial class branch
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public branch()
+        {
+            this.bookinfo = new HashSet<bookinfo>();
+        }
+    
         public int branchid { get; set; }
         public string name { get; set; }
         public string location { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<bookinfo> bookinfo { get; set; }
     }
 }

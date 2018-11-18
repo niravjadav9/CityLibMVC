@@ -1,0 +1,86 @@
+﻿@model Liberary_Management.Models.AddBookViewModel
+
+@{
+
+    //ViewBag.Publisher = context.publisher.Select(x => new { x.publisherid, x.publishername }).ToList();
+    //ViewBag.Author = context.author.Select(x => new { x.authorid, x.name }).ToList();
+    //ViewBag.Branch = context.branch.Select(x => new { x.branchid, x.name }).ToList();
+    //ViewBag.Position = context.location.Select(x => x.position).ToList();
+
+    var publisher = new List<SelectListItem>();
+    if (ViewBag.Publisher != null)
+    {
+        foreach (var item in ViewBag.Publisher)
+        {
+            publisher.Add(new SelectListItem { Text = item.publishername, Value = item.publisherid.ToString() });
+        }
+    }
+
+    var author = new List<SelectListItem>();
+    if (ViewBag.Author != null)
+    {
+        foreach (var item in ViewBag.Author)
+        {
+            author.Add(new SelectListItem { Text = item.name, Value = item.authorid.ToString() });
+        }
+    }
+
+    var branch = new List<SelectListItem>();
+    if (ViewBag.Branch != null)
+    {
+        foreach (var item in ViewBag.Branch)
+        {
+            branch.Add(new SelectListItem { Text = item.name, Value = item.branchid.ToString() });
+        }
+    }
+
+    var position = new List<SelectListItem>();
+    if (ViewBag.Position != null)
+    {
+        foreach (var item in ViewBag.Position)
+        {
+            position.Add(new SelectListItem { Text = item.position, Value = item.position });
+        }
+    }
+
+    var isbn = new List<SelectListItem>();
+    if (ViewBag.Isbn != null)
+    {
+        foreach (var item in ViewBag.Isbn)
+        {
+            isbn.Add(new SelectListItem { Text = item.isbn, Value = item.isbn});
+        }
+    }
+}
+
+<form action="/action_page.php">
+    <div class="form-group">
+        <label for="isbn">ISBN:</label>
+        <input type="text" class="form-control" id="txtIsbn" placeholder="ISBN" name="isbn">
+    </div>
+    <div class="form-group">
+        <label for="title">Title:</label>
+        <input type="text" class="form-control" id="txtTitle" placeholder="Title" name="title">
+    </div>
+    <div class="form-group">
+        <label for="publisher">Publisher:</label>
+        @Html.DropDownList("publisher", publisher, new { @id = "drpPublisher", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="author">Author:</label>
+        @Html.DropDownList("author", author, new { @id = "drpAuthor", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="publiicationDate">Publication Date:</label>
+        <input type="date" class="form-control" id="dtPublicationDate" name="publiicationDate">
+    </div>
+    <div class="form-group">
+        <label for="branch">Branch:</label>
+        @Html.DropDownList("branch", branch, new { @id = "drpBranch", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label for="position">Position:</label>
+        @Html.DropDownList("position", position, new { @id = "drpPosition", @class = "form-control" })
+    </div>
+    <button type="submit" class="btn btn-default" id="btnSaveBooks">Save New Book</button>
+</form>

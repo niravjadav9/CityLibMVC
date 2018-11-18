@@ -1,0 +1,70 @@
+﻿
+@{
+    ViewBag.Title = "ReaderFunction";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/Content/simple-sidebar.css" rel="stylesheet" />
+
+<style>
+</style>
+
+<div class="sidenav" id="readerLeftMenu">
+    <button class="btn btn-link linkBtn" id="btnAddBook" onclick="BtnOnClick(this.id)">Add Book</button>
+    <button class="btn btn-link linkBtn" id="btnSearchBook" onclick="BtnOnClick(this.id)">Search Book</button>
+    <button class="btn btn-link linkBtn" id="btnAddReader" onclick="BtnOnClick(this.id)">Add New Reader</button>
+    <button class="btn btn-link linkBtn" id="btnBatchInfo" onclick="BtnOnClick(this.id)">Batch info</button>
+    <button class="btn btn-link linkBtn" id="btnTop10Borrower" onclick="BtnOnClick(this.id)">Top 10 Borrower</button>
+    <button class="btn btn-link linkBtn" id="btnTop10Books" onclick="BtnOnClick(this.id)">Top 10 most Borrowed Books</button>
+    <button class="btn btn-link linkBtn" id="btnAvgFine" onclick="BtnOnClick(this.id)">Avg Fine per Reader</button>
+</div>
+<div class="main">
+    <h2 id="userMsg"></h2>
+    <div id="mainContent">
+
+    </div>
+</div>
+
+<script>
+    var isUserValid = false;
+    
+    function checkValidUser(isValid) {
+        if (isValid == true) {
+            $('#readerLeftMenu').children('a').attr('href');
+            $('#readerLeftMenu').children('a').css('pointer-events', 'auto');
+        } else {
+            $('#readerLeftMenu').children('a').removeAttr('href');
+            $('#readerLeftMenu').children('a').css('pointer-events', 'none');
+        }
+    }
+
+    function BtnOnClick(btnId) {
+        var siteURL;
+        switch (btnId) {
+            case "btnAddBook":
+                siteURL = "@Url.Action("AddBook", "AdminFunction")";
+                break;
+
+            case "btnSearchBook":
+                siteURL = "@Url.Action("SearchBook", "AdminFunction")";
+                break;
+
+            case "btnAddReader":
+                siteURL = "@Url.Action("AddReader", "AdminFunction")";
+                break;
+
+            default:
+                break;
+        }
+
+        function callbackSuccess(response) {
+            $('#mainContent').html(response);
+        }
+
+        function callbackError(res) {
+            console.error(res);
+        }
+
+        ajaxGet(siteURL, null, callbackSuccess, callbackError);
+    }
+</script>

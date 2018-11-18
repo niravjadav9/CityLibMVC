@@ -30,7 +30,6 @@ namespace Liberary_Management
         public virtual DbSet<admin> admin { get; set; }
         public virtual DbSet<author> author { get; set; }
         public virtual DbSet<book> book { get; set; }
-        public virtual DbSet<bookinfo> bookinfo { get; set; }
         public virtual DbSet<borrow> borrow { get; set; }
         public virtual DbSet<branch> branch { get; set; }
         public virtual DbSet<copy> copy { get; set; }
@@ -38,7 +37,7 @@ namespace Liberary_Management
         public virtual DbSet<publisher> publisher { get; set; }
         public virtual DbSet<reader> reader { get; set; }
         public virtual DbSet<reserve> reserve { get; set; }
-        public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
+        public virtual DbSet<bookinfo> bookinfo { get; set; }
     
         public virtual ObjectResult<SearchBookBy_Result> SearchBookBy(Nullable<int> option, string searchData)
         {
@@ -154,6 +153,111 @@ namespace Liberary_Management
         public virtual int sp_upgraddiagrams()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
+        }
+    
+        public virtual ObjectResult<SP_GetBookCopyForAdmin_Result> SP_GetBookCopyForAdmin(Nullable<int> option, string searchValue)
+        {
+            var optionParameter = option.HasValue ?
+                new ObjectParameter("option", option) :
+                new ObjectParameter("option", typeof(int));
+    
+            var searchValueParameter = searchValue != null ?
+                new ObjectParameter("searchValue", searchValue) :
+                new ObjectParameter("searchValue", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetBookCopyForAdmin_Result>("SP_GetBookCopyForAdmin", optionParameter, searchValueParameter);
+        }
+    
+        public virtual int SP_InsertBookCopy(string isbn, string title, string publisherid, string author, string publicationDate, string branchid, string position)
+        {
+            var isbnParameter = isbn != null ?
+                new ObjectParameter("isbn", isbn) :
+                new ObjectParameter("isbn", typeof(string));
+    
+            var titleParameter = title != null ?
+                new ObjectParameter("title", title) :
+                new ObjectParameter("title", typeof(string));
+    
+            var publisheridParameter = publisherid != null ?
+                new ObjectParameter("publisherid", publisherid) :
+                new ObjectParameter("publisherid", typeof(string));
+    
+            var authorParameter = author != null ?
+                new ObjectParameter("author", author) :
+                new ObjectParameter("author", typeof(string));
+    
+            var publicationDateParameter = publicationDate != null ?
+                new ObjectParameter("publicationDate", publicationDate) :
+                new ObjectParameter("publicationDate", typeof(string));
+    
+            var branchidParameter = branchid != null ?
+                new ObjectParameter("branchid", branchid) :
+                new ObjectParameter("branchid", typeof(string));
+    
+            var positionParameter = position != null ?
+                new ObjectParameter("position", position) :
+                new ObjectParameter("position", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_InsertBookCopy", isbnParameter, titleParameter, publisheridParameter, authorParameter, publicationDateParameter, branchidParameter, positionParameter);
+        }
+    
+        public virtual ObjectResult<SearchBookBy1_Result> SearchBookBy1(Nullable<int> option, string searchData)
+        {
+            var optionParameter = option.HasValue ?
+                new ObjectParameter("option", option) :
+                new ObjectParameter("option", typeof(int));
+    
+            var searchDataParameter = searchData != null ?
+                new ObjectParameter("searchData", searchData) :
+                new ObjectParameter("searchData", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SearchBookBy1_Result>("SearchBookBy1", optionParameter, searchDataParameter);
+        }
+    
+        public virtual ObjectResult<SP_GetBookCopyForAdmin1_Result> SP_GetBookCopyForAdmin1(Nullable<int> option, string searchValue)
+        {
+            var optionParameter = option.HasValue ?
+                new ObjectParameter("option", option) :
+                new ObjectParameter("option", typeof(int));
+    
+            var searchValueParameter = searchValue != null ?
+                new ObjectParameter("searchValue", searchValue) :
+                new ObjectParameter("searchValue", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_GetBookCopyForAdmin1_Result>("SP_GetBookCopyForAdmin1", optionParameter, searchValueParameter);
+        }
+    
+        public virtual int SP_InsertBookCopy1(string isbn, string title, string publisherid, string author, string publicationDate, string branchid, string position)
+        {
+            var isbnParameter = isbn != null ?
+                new ObjectParameter("isbn", isbn) :
+                new ObjectParameter("isbn", typeof(string));
+    
+            var titleParameter = title != null ?
+                new ObjectParameter("title", title) :
+                new ObjectParameter("title", typeof(string));
+    
+            var publisheridParameter = publisherid != null ?
+                new ObjectParameter("publisherid", publisherid) :
+                new ObjectParameter("publisherid", typeof(string));
+    
+            var authorParameter = author != null ?
+                new ObjectParameter("author", author) :
+                new ObjectParameter("author", typeof(string));
+    
+            var publicationDateParameter = publicationDate != null ?
+                new ObjectParameter("publicationDate", publicationDate) :
+                new ObjectParameter("publicationDate", typeof(string));
+    
+            var branchidParameter = branchid != null ?
+                new ObjectParameter("branchid", branchid) :
+                new ObjectParameter("branchid", typeof(string));
+    
+            var positionParameter = position != null ?
+                new ObjectParameter("position", position) :
+                new ObjectParameter("position", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_InsertBookCopy1", isbnParameter, titleParameter, publisheridParameter, authorParameter, publicationDateParameter, branchidParameter, positionParameter);
         }
     }
 }

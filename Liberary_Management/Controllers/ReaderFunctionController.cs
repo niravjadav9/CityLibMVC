@@ -44,6 +44,11 @@ namespace Liberary_Management.Controllers
             return PartialView("SearchBook");
         }
 
+        public ActionResult BookCheckout()
+        {
+            return PartialView("BookCheckout");
+        }
+
         [HttpPost]
         public ActionResult SearchByBook(int option, string data)
         {

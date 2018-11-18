@@ -10,18 +10,16 @@
 namespace Liberary_Management
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class bookinfo
+    public partial class SP_GetBookCopyForAdmin_Result
     {
-        public string isbn { get; set; }
-        public string title { get; set; }
-        public int publisherid { get; set; }
-        public System.DateTime publicationdate { get; set; }
-        public int authorid { get; set; }
-        public Nullable<int> branchid { get; set; }
-        public string position { get; set; }
-    
-        public virtual branch branch { get; set; }
+        public Nullable<int> BookId { get; set; }
+        public string ISBN { get; set; }
+        public string Title { get; set; }
+        public string AuthorName { get; set; }
+        public string Publishre { get; set; }
+        public System.DateTime PublicationDate { get; set; }
+        public string BranchName { get; set; }
+        public string Position { get; set; }
     }
 }
