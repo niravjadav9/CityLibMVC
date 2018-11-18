@@ -10,18 +10,14 @@
 namespace Liberary_Management
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class bookinfo
+    public partial class SearchBookBy1_Result
     {
-        public string isbn { get; set; }
-        public string title { get; set; }
-        public int publisherid { get; set; }
-        public System.DateTime publicationdate { get; set; }
-        public int authorid { get; set; }
-        public Nullable<int> branchid { get; set; }
-        public string position { get; set; }
-    
-        public virtual branch branch { get; set; }
+        public int BookId { get; set; }
+        public string ISBN { get; set; }
+        public string BookTitle { get; set; }
+        public string AuthorName { get; set; }
+        public string PublisherName { get; set; }
+        public System.DateTime PublicationDate { get; set; }
     }
 }

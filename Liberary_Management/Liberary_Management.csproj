@@ -163,6 +163,7 @@
     <Compile Include="branch.cs">
       <DependentUpon>LibMgt.tt</DependentUpon>
     </Compile>
+    <Compile Include="Controllers\AdminFunctionController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ReaderFunctionController.cs" />
     <Compile Include="copy.cs">
@@ -189,6 +190,8 @@
     <Compile Include="location.cs">
       <DependentUpon>LibMgt.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AddBookViewModel.cs" />
+    <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="publisher.cs">
       <DependentUpon>LibMgt.tt</DependentUpon>
@@ -199,16 +202,22 @@
     <Compile Include="reserve.cs">
       <DependentUpon>LibMgt.tt</DependentUpon>
     </Compile>
+    <Compile Include="SearchBookBy1_Result.cs">
+      <DependentUpon>LibMgt.tt</DependentUpon>
+    </Compile>
     <Compile Include="SearchBookBy_Result.cs">
+      <DependentUpon>LibMgt.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_GetBookCopyForAdmin1_Result.cs">
+      <DependentUpon>LibMgt.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_GetBookCopyForAdmin_Result.cs">
       <DependentUpon>LibMgt.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_helpdiagramdefinition_Result.cs">
       <DependentUpon>LibMgt.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_helpdiagrams_Result.cs">
-      <DependentUpon>LibMgt.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysdiagrams.cs">
       <DependentUpon>LibMgt.tt</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -291,10 +300,14 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\ReaderFunction\Index.cshtml" />
     <Content Include="Views\ReaderFunction\SearchBook.cshtml" />
+    <Content Include="Views\ReaderFunction\BookCheckout.cshtml" />
+    <Content Include="Views\AdminFunction\Index.cshtml" />
+    <Content Include="Views\AdminFunction\Dashboard.cshtml" />
+    <Content Include="Views\AdminFunction\AddBook.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Models\" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
