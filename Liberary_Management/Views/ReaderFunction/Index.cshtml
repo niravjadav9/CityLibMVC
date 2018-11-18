@@ -13,14 +13,11 @@
 <div class="sidenav" id="readerLeftMenu">
     <button class="btn btn-link linkBtn" id="btnSearchBook" onclick="BtnOnClick(this.id)">Search Book</button>
     <button class="btn btn-link linkBtn" id="btnBookCheckout" onclick="BtnOnClick(this.id)">Book Checkout</button>
-    @Html.ActionLink("Search Book", "SearchBook", "ReaderFunction")
-    @Html.ActionLink("Book Checkout", "SearchBook", "ReaderFunction")
-    @Html.ActionLink("Book Return", "SearchBook", "ReaderFunction")
-    @Html.ActionLink("Book reserve", "SearchBook", "ReaderFunction")
-    @Html.ActionLink("Compute Fine", "SearchBook", "ReaderFunction")
-    @Html.ActionLink("Reserved Book", "SearchBook", "ReaderFunction")
-    @Html.ActionLink("Print Books List", "SearchBook", "ReaderFunction")
-    @Html.ActionLink("Quit", "SearchBook", "ReaderFunction")
+    <button class="btn btn-link linkBtn" id="btnBookReturn" onclick="BtnOnClick(this.id)">Book Return</button>
+    <button class="btn btn-link linkBtn" id="btnBookCheckout" onclick="BtnOnClick(this.id)">Book reserve</button>
+    <button class="btn btn-link linkBtn" id="btnComputeFine" onclick="BtnOnClick(this.id)">Compute Fine</button>
+    <button class="btn btn-link linkBtn" id="btnBookCheckout" onclick="BtnOnClick(this.id)">Book Checkout</button>
+    <button class="btn btn-link linkBtn" id="btnPrintBookList" onclick="BtnOnClick(this.id)">Print book list</button>
 </div>
 <div class="main">
     <h2 id="userMsg"></h2>
@@ -57,7 +54,7 @@
 
     function checkValidUser(isValid) {
         if (isValid == true) {
-            $('#readerLeftMenu').children('button').attr('disabled', true);
+            $('#readerLeftMenu').children('button').attr('disabled', false);
             //$('#readerLeftMenu').children('button').css('pointer-events', 'auto');
         } else {
             $('#readerLeftMenu').children('button').attr('disabled', true);
@@ -73,7 +70,7 @@
                 break;
 
             case "btnBookCheckout":
-                siteURL = "@Url.Action("BookCheckout", "ReaderFunction");
+                siteURL = "@Url.Action("BookCheckout", "ReaderFunction")";
                 break;
         }
 
