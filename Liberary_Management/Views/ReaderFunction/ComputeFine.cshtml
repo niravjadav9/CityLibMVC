@@ -1,0 +1,56 @@
+﻿
+
+<div class="">
+    <h2>Compute Fine</h2>
+    <table id="ComputedFile" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Book Id</th>
+                <th>Book Name</th>
+                <th>Branch Name</th>
+                <th>Branch Location</th>
+                <th>Borrow Date</th>
+                <th>Passed Day Count</th>
+                <th>Fine</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var x = "";
+        $("#ComputedFile tbody").html("");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DisplayComputedFine", "ReaderFunction")',
+            data: JSON.stringify({ "ReaderId": $("#hfReaderId").val() }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (typeof data !== 'undefined' && data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var d = new Date(parseInt(data[i].bdate.substr(6)));
+                        x += "<tr>";
+                        x += "<td>" + data[i].bookid + "</td>";
+                        x += "<td>" + data[i].title + "</td>";
+                        x += "<td>" + data[i].name + "</td>";
+                        x += "<td>" + data[i].location + "</td>";
+                        x += "<td>" + d.getFullYear() + "-" + (Number(d.getMonth() + 1) > 9 ? Number(d.getMonth() + 1) : "0" + Number(d.getMonth() + 1)) + "-" + d.getDate() + "</td>";
+                        x += "<td>" + (Number(data[i].PassedDayCount) >= 0 ? data[i].PassedDayCount : 0) + "</td>";
+                        x += "<td>$" + data[i].computedFine + "</td>";
+                        x += "</tr>";
+                    }
+                    $("#ComputedFile tbody").html(x);
+                }
+                else {
+                    $("#ComputedFile tbody").html("<tr><td colspan='7' align='center'>No records found.</td></tr>");
+                }
+            },
+            error: function () {
+                alert("Error while computed fine");
+            }
+        });
+    });
+</script>

@@ -1,0 +1,50 @@
+﻿
+
+
+<div class="">
+    <h2>Print book list and status</h2>
+    <table id="PrintBooklist" class="table table-striped">
+        <thead>
+            <tr>
+                <th>Reader Id</th>
+                <th>Book Id</th>
+                <th>Book Name</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+</div>
+
+<script>
+    $(document).ready(function () {
+        var x = "";
+        $("#PrintBooklist tbody").html("");
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("PrintBookList", "ReaderFunction")',
+            data: JSON.stringify({ "ReaderId": $("#hfReaderId").val() }),
+            dataType: "json",
+            contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (typeof data !== 'undefined' && data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        x += "<tr>";
+                        x += "<td>" + data[i].readerid + "</td>";
+                        x += "<td>" + data[i].bookid + "</td>";
+                        x += "<td>" + data[i].title + "</td>";
+                        x += "<td>" + data[i].status + "</td>";
+                        x += "</tr>";
+                    }
+                    $("#PrintBooklist tbody").html(x);
+                }
+                else {
+                    $("#PrintBooklist tbody").html("<tr><td colspan='4' align='center'>No records found.</td></tr>");
+                }
+            },
+            error: function () {
+                alert("Error while print book list");
+            }
+        });
+    });
+</script>
