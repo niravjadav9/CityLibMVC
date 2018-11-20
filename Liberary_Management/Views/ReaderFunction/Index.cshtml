@@ -7,7 +7,6 @@
 <link href="~/Content/simple-sidebar.css" rel="stylesheet" />
 
 <style>
-    
 </style>
 
 <div class="sidenav" id="readerLeftMenu">
@@ -16,7 +15,6 @@
     <button class="btn btn-link linkBtn" id="btnBookReturn" onclick="BtnOnClick(this.id)">Book Return</button>
     <button class="btn btn-link linkBtn" id="btnBookReserve" onclick="BtnOnClick(this.id)">Book Reserve</button>
     <button class="btn btn-link linkBtn" id="btnComputeFine" onclick="BtnOnClick(this.id)">Compute Fine</button>
-    <button class="btn btn-link linkBtn" id="btnBookCheckout" onclick="BtnOnClick(this.id)">Book Checkout</button>
     <button class="btn btn-link linkBtn" id="btnPrintBookList" onclick="BtnOnClick(this.id)">Print book list</button>
 </div>
 <div class="main">
@@ -24,7 +22,7 @@
     <input type="hidden" id="hfReaderId" value="" />
     <div id="mainContent">
 
-        
+
     </div>
 </div>
 
@@ -76,9 +74,22 @@
                 siteURL = "@Url.Action("BookCheckout", "ReaderFunction")";
                 break;
 
+            case "btnBookReturn":
+                siteURL = "@Url.Action("BookReturn", "ReaderFunction")";
+                break;
+
             case "btnBookReserve":
                 siteURL = "@Url.Action("BookReserve", "ReaderFunction")";
                 break;
+
+            case "btnComputeFine":
+                siteURL = "@Url.Action("ComputeFine", "ReaderFunction")";
+                break;
+
+            case "btnPrintBookList":
+                siteURL = "@Url.Action("PrintBookList", "ReaderFunction")";
+                break;
+
         }
 
         function callbackSuccess(response) {

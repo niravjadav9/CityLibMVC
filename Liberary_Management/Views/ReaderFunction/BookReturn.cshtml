@@ -1,5 +1,6 @@
 ﻿
-<h2>Book Checkout</h2>
+
+<h2>Book Return</h2>
 <div class="form-horizontal">
     <div class="form-group">
         <label class="control-label col-sm-2">Branch</label>
@@ -20,7 +21,7 @@
     <div class="form-group">
         <div class="col-sm-2"></div>
         <div class="col-sm-3">
-            <input type="button" class="btn btn-default" value="Checkout" id="btnCheckOutBook" onclick="CheckOutBook();" />
+            <input type="button" class="btn btn-default" value="Return" id="btnReturnBook" onclick="ReturnBook();" />
         </div>
     </div>
 
@@ -31,20 +32,20 @@
             if (selectedBranch != "" && selectedBranch != "0") {
                 $.ajax({
                     type: "POST",
-                    url: '@Url.Action("GetBooksByBranch","ReaderFunction")',
-                    data: JSON.stringify({ "BranchId": selectedBranch }),
+                    url: '@Url.Action("GetBooksForReturn", "ReaderFunction")',
+                    data: JSON.stringify({ "BranchId": selectedBranch, "ReaderId": $("#hfReaderId").val()  }),
                     dataType: "json",
                     contentType: "application/json; charset=utf-8",
                     success: function (data) {
-                        
+
                         if (typeof data !== 'undefined' && data.length > 0) {
                             for (var i = 0; i < data.length; i++) {
                                 $('#drpBook').append($("<option></option>").attr("value", data[i].bookid).attr("data-isbn", data[i].isbn).text(data[i].title));
                             }
                         }
                         else {
-                            $('#drpBook').append($("<option></option>").attr("value", "0").text("No books found!"));
-                            alert("No books found!");
+                            $('#drpBook').append($("<option></option>").attr("value", "0").text("No books borrow from this branch"));
+                            alert("No books borrow from this branch");
                         }
                     },
                     error: function () {
@@ -57,17 +58,16 @@
             }
         });
 
-        function CheckOutBook() {
+        function ReturnBook() {
             var selectedBranch = $("#drpBranch").val();
             var selectedBook = $("#drpBook").val();
-            var selectedBookIsbn = $("#drpBook option:selected").data("isbn");
             if (selectedBranch != "" && selectedBranch != "0") {
                 if (selectedBook != "" && selectedBook != "0") {
                     console.log($("#hfReaderId").val())
                     $.ajax({
                         type: "POST",
-                        url: '@Url.Action("CheckoutBook", "ReaderFunction")',
-                        data: JSON.stringify({ "BranchId": selectedBranch, "BookId": selectedBook, "ISBN": selectedBookIsbn, "ReaderId": $("#hfReaderId").val()}),
+                        url: '@Url.Action("BookReturn", "ReaderFunction")',
+                        data: JSON.stringify({ "BranchId": selectedBranch, "BookId": selectedBook, "ReaderId": $("#hfReaderId").val()}),
                         dataType: "json",
                         contentType: "application/json; charset=utf-8",
                         success: function (data) {
@@ -75,7 +75,7 @@
 
                         },
                         error: function () {
-                            alert("Error while checkout book");
+                            alert("Error while return book");
                         }
                     });
                 }

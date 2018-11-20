@@ -307,6 +307,9 @@
     <Content Include="Views\AdminFunction\Dashboard.cshtml" />
     <Content Include="Views\AdminFunction\AddBook.cshtml" />
     <Content Include="Views\ReaderFunction\BookReserve.cshtml" />
+    <Content Include="Views\ReaderFunction\ComputeFine.cshtml" />
+    <Content Include="Views\ReaderFunction\BookReturn.cshtml" />
+    <Content Include="Views\ReaderFunction\PrintBookList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
