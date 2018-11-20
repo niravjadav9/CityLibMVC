@@ -1,17 +1,18 @@
-﻿@* ViewBag.BranchList *@
-
-@{ 
+﻿
+@{
     var branchList = new List<SelectListItem>();
     //var item = new List<Liberary_Management.Models.Top10BorrowerViewModel>();
 
     foreach (var item in ViewBag.BranchList)
     {
-        branchList.Add(new SelectListItem {
+        branchList.Add(new SelectListItem
+        {
             Text = item.name,
             Value = item.branchid.ToString()
         });
     }
 }
+
 
 <div class="row">
     <div class="form-group">
@@ -24,33 +25,37 @@
     <table id="tblDisplayResult" class="table table-striped">
         <thead>
             <tr>
-                <th>Reader Name</th>
-                <th>Total Books</th>
+                <th>Book Count</th>
+                <th>Book ID</th>
+                <th>Book Name</th>
             </tr>
         </thead>
         <tbody></tbody>
     </table>
 </div>
 
+
 <script>
     $("#drpBranches").change(function () {
-        debugger;
         var branchId = parseInt($(this).val());
-        var siteURL = "@Url.Action("Top10BrrowerList", "AdminFunction")";
+        var siteURL = "@Url.Action("Top10BrrowedBookList", "AdminFunction")";
         var strData = { branchid: branchId };
 
-        function callbackSuccess (response) {
+        function callbackSuccess(response) {
+            debugger;
             var x = "";
             $('#tblDisplayResult tbody').html('');
             var data = JSON.parse(response);
-            
+
             if (typeof data !== 'undefined' && data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
                     x += "<tr>";
-                    x += "<td>" + data[i].readerName + "</td>";
-                    x += "<td>" + data[i].totalBook + "</td>";
+                    x += "<td>" + data[i].BookCount + "</td>";
+                    x += "<td>" + data[i].BookId + "</td>";
+                    x += "<td>" + data[i].BookName + "</td>";
                     x += "</tr>";
                 }
+               
                 $("#tblDisplayResult tbody").html(x);
             }
             else {

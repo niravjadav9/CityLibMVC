@@ -133,8 +133,14 @@
           <Parameter Name="branchid" Type="varchar(max)" Mode="In" />
           <Parameter Name="position" Type="varchar(max)" Mode="In" />
         </Function>
+        <Function Name="SP_SearchBookAdminSide" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="bookname" Type="varchar(max)" Mode="In" />
+        </Function>
         <Function Name="SP_Top10Borrower" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="brnachid" Type="int" Mode="In" />
+        </Function>
+        <Function Name="Top10BorrowedBooks" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="branchid" Type="int" Mode="In" />
         </Function>
         <EntityContainer Name="LiberaryManagementModelStoreContainer">
           <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
@@ -238,7 +244,13 @@
             <End Role="bookinfo" EntitySet="bookinfo" />
           </AssociationSet>
           <FunctionImport Name="SP_Top10Borrower" ReturnType="Collection(LiberaryManagementModel.SP_Top10Borrower_Result)">
-            <Parameter Name="brnachid" Mode="In" Type="Int32" />
+          <Parameter Name="brnachid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="Top10BorrowedBooks" ReturnType="Collection(LiberaryManagementModel.Top10BorrowedBooks_Result)">
+          <Parameter Name="branchid" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="SP_SearchBookAdminSide" ReturnType="Collection(LiberaryManagementModel.SP_SearchBookAdminSide_Result)">
+            <Parameter Name="bookname" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="admin">
@@ -405,6 +417,16 @@
           <Property Type="String" Name="ReaderName" Nullable="true" MaxLength="20" />
           <Property Type="Int32" Name="TotalBook" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="Top10BorrowedBooks_Result">
+          <Property Type="Int32" Name="BookCount" Nullable="true" />
+          <Property Type="Int32" Name="BookId" Nullable="false" />
+          <Property Type="String" Name="BookName" Nullable="false" MaxLength="45" />
+        </ComplexType>
+        <ComplexType Name="SP_SearchBookAdminSide_Result">
+          <Property Type="String" Name="name" Nullable="false" MaxLength="20" />
+          <Property Type="Int32" Name="bookid" Nullable="false" />
+          <Property Type="String" Name="isbn" Nullable="false" MaxLength="11" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -547,6 +569,24 @@
               <ComplexTypeMapping TypeName="LiberaryManagementModel.SP_Top10Borrower_Result">
                 <ScalarProperty Name="ReaderName" ColumnName="ReaderName" />
                 <ScalarProperty Name="TotalBook" ColumnName="TotalBook" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="Top10BorrowedBooks" FunctionName="LiberaryManagementModel.Store.Top10BorrowedBooks">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LiberaryManagementModel.Top10BorrowedBooks_Result">
+                <ScalarProperty Name="BookCount" ColumnName="BookCount" />
+                <ScalarProperty Name="BookId" ColumnName="BookId" />
+                <ScalarProperty Name="BookName" ColumnName="BookName" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_SearchBookAdminSide" FunctionName="LiberaryManagementModel.Store.SP_SearchBookAdminSide">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LiberaryManagementModel.SP_SearchBookAdminSide_Result">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="bookid" ColumnName="bookid" />
+                <ScalarProperty Name="isbn" ColumnName="isbn" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

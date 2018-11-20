@@ -1,31 +1,22 @@
-﻿@* ViewBag.BranchList *@
-
-@{ 
-    var branchList = new List<SelectListItem>();
-    //var item = new List<Liberary_Management.Models.Top10BorrowerViewModel>();
-
-    foreach (var item in ViewBag.BranchList)
-    {
-        branchList.Add(new SelectListItem {
-            Text = item.name,
-            Value = item.branchid.ToString()
-        });
-    }
-}
-
-<div class="row">
+﻿<div class="row">
     <div class="form-group">
-        <label for="Branch">Branches: </label>
-        @Html.DropDownList("Branch", branchList, new { @id = "drpBranches", @class = "form-control" })
+        <label for="Branch">Book Title: </label>
+        @Html.TextBox("Books", "", new { @id = "txtBook", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <input type="button" value="Search" id="btnSearch" />
     </div>
 </div>
 
+
 <div id="displayTable">
+    <label id="note">Search book is available at following brnaches.</label>
     <table id="tblDisplayResult" class="table table-striped">
         <thead>
             <tr>
-                <th>Reader Name</th>
-                <th>Total Books</th>
+                <th>Branch Name</th>
+                <th>Book ID</th>
+                <th>ISBN</th>
             </tr>
         </thead>
         <tbody></tbody>
@@ -33,24 +24,25 @@
 </div>
 
 <script>
-    $("#drpBranches").change(function () {
-        debugger;
-        var branchId = parseInt($(this).val());
-        var siteURL = "@Url.Action("Top10BrrowerList", "AdminFunction")";
-        var strData = { branchid: branchId };
+    $("#btnSearch").click(function () {
+        var title = $('#txtBook').val();
+        var siteURL = "@Url.Action("SearchBookByName", "AdminFunction")";
+        var strData = { bookname: title };
 
-        function callbackSuccess (response) {
+        function callbackSuccess(response) {
             var x = "";
             $('#tblDisplayResult tbody').html('');
             var data = JSON.parse(response);
-            
+
             if (typeof data !== 'undefined' && data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
                     x += "<tr>";
-                    x += "<td>" + data[i].readerName + "</td>";
-                    x += "<td>" + data[i].totalBook + "</td>";
+                    x += "<td>" + data[i].branchname + "</td>";
+                    x += "<td>" + data[i].bookid + "</td>";
+                    x += "<td>" + data[i].isbn + "</td>";
                     x += "</tr>";
                 }
+
                 $("#tblDisplayResult tbody").html(x);
             }
             else {

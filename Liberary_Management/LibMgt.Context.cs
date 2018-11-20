@@ -268,5 +268,23 @@ namespace Liberary_Management
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Top10Borrower_Result>("SP_Top10Borrower", brnachidParameter);
         }
+    
+        public virtual ObjectResult<Top10BorrowedBooks_Result> Top10BorrowedBooks(Nullable<int> branchid)
+        {
+            var branchidParameter = branchid.HasValue ?
+                new ObjectParameter("branchid", branchid) :
+                new ObjectParameter("branchid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Top10BorrowedBooks_Result>("Top10BorrowedBooks", branchidParameter);
+        }
+    
+        public virtual ObjectResult<SP_SearchBookAdminSide_Result> SP_SearchBookAdminSide(string bookname)
+        {
+            var booknameParameter = bookname != null ?
+                new ObjectParameter("bookname", bookname) :
+                new ObjectParameter("bookname", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_SearchBookAdminSide_Result>("SP_SearchBookAdminSide", booknameParameter);
+        }
     }
 }

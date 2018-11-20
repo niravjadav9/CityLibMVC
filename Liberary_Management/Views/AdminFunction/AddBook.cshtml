@@ -56,7 +56,8 @@
 <form>
     <div class="form-group">
         <label for="isbn">ISBN:</label>
-        @Html.DropDownList("isbn", isbn, new { @id = "drpIsbn", @class = "form-control" })
+        @*@Html.DropDownList("isbn", isbn, new { @id = "drpIsbn", @class = "form-control" })*@
+        <input type="text" class="form-control" id="drpIsbn" placeholder="Title" name="title">
     </div>
     <div class="form-group">
         <label for="title">Title:</label>
@@ -107,7 +108,9 @@
         }
 
         var callbackSuccess = function (response) {
-            alert(`Book has inserted Successfully. ${response}`);
+            debugger;
+            alert(response);
+            $('.form-control').val('');
         }
 
         var callbackError = function (x, y, z) {
@@ -115,6 +118,7 @@
         }
 
         var siteUrl = "@Url.Action("AddBookCopy", "AdminFunction")";
-        ajaxPOST(siteUrl, data, callbackSuccess, 'Admin Function', callbackError);
+        ajaxGet(siteUrl, data, callbackSuccess);
+        //ajaxPOST(siteUrl, data, callbackSuccess, 'Admin Function', callbackError);
     });
 </script>
