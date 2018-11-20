@@ -259,5 +259,14 @@ namespace Liberary_Management
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("SP_InsertBookCopy1", isbnParameter, titleParameter, publisheridParameter, authorParameter, publicationDateParameter, branchidParameter, positionParameter);
         }
+    
+        public virtual ObjectResult<SP_Top10Borrower_Result> SP_Top10Borrower(Nullable<int> brnachid)
+        {
+            var brnachidParameter = brnachid.HasValue ?
+                new ObjectParameter("brnachid", brnachid) :
+                new ObjectParameter("brnachid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_Top10Borrower_Result>("SP_Top10Borrower", brnachidParameter);
+        }
     }
 }

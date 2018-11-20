@@ -13,7 +13,7 @@
     <button class="btn btn-link linkBtn" id="btnAddBook" onclick="BtnOnClick(this.id)">Add Book</button>
     <button class="btn btn-link linkBtn" id="btnSearchBook" onclick="BtnOnClick(this.id)">Search Book</button>
     <button class="btn btn-link linkBtn" id="btnAddReader" onclick="BtnOnClick(this.id)">Add New Reader</button>
-    <button class="btn btn-link linkBtn" id="btnBatchInfo" onclick="BtnOnClick(this.id)">Batch info</button>
+    <button class="btn btn-link linkBtn" id="btnBranchInfo" onclick="BtnOnClick(this.id)">Branch Information</button>
     <button class="btn btn-link linkBtn" id="btnTop10Borrower" onclick="BtnOnClick(this.id)">Top 10 Borrower</button>
     <button class="btn btn-link linkBtn" id="btnTop10Books" onclick="BtnOnClick(this.id)">Top 10 most Borrowed Books</button>
     <button class="btn btn-link linkBtn" id="btnAvgFine" onclick="BtnOnClick(this.id)">Avg Fine per Reader</button>
@@ -51,6 +51,14 @@
 
             case "btnAddReader":
                 siteURL = "@Url.Action("AddReader", "AdminFunction")";
+                break;
+
+            case "btnBranchInfo":
+                siteURL = "@Url.Action("BranchLocation", "AdminFunction")";
+                break;
+
+            case "btnTop10Borrower":
+                siteURL = "@Url.Action("Top10MostBorrower", "AdminFunction")";
                 break;
 
             default:

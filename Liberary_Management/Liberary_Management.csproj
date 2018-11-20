@@ -191,7 +191,9 @@
       <DependentUpon>LibMgt.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AddBookViewModel.cs" />
+    <Compile Include="Models\BranchViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
+    <Compile Include="Models\Top10BorrowerViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="publisher.cs">
       <DependentUpon>LibMgt.tt</DependentUpon>
@@ -218,6 +220,9 @@
       <DependentUpon>LibMgt.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_helpdiagrams_Result.cs">
+      <DependentUpon>LibMgt.tt</DependentUpon>
+    </Compile>
+    <Compile Include="SP_Top10Borrower_Result.cs">
       <DependentUpon>LibMgt.tt</DependentUpon>
     </Compile>
   </ItemGroup>
@@ -307,6 +312,8 @@
     <Content Include="Views\AdminFunction\Dashboard.cshtml" />
     <Content Include="Views\AdminFunction\AddBook.cshtml" />
     <Content Include="Views\ReaderFunction\BookReserve.cshtml" />
+    <Content Include="Views\AdminFunction\BranchLocation.cshtml" />
+    <Content Include="Views\AdminFunction\Top10MostBorrower.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

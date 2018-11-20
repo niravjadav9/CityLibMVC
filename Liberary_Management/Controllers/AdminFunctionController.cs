@@ -1,8 +1,8 @@
-﻿using System;
-using System.Web.Mvc;
+﻿using Liberary_Management.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Liberary_Management.Models;
+using System.Web.Mvc;
 
 namespace Liberary_Management.Controllers
 {
@@ -13,7 +13,7 @@ namespace Liberary_Management.Controllers
         {
             return View();
         }
-        
+
         [HttpPost]
         public ActionResult Index(LoginViewModel collection)
         {
@@ -27,7 +27,7 @@ namespace Liberary_Management.Controllers
                         adminUser = context.admin.Where(x => x.id == collection.Username && x.password == collection.Password).FirstOrDefault();
                         if (adminUser != null)
                         {
-                            return RedirectToAction("Dashboard", "AdminFunction");  
+                            return RedirectToAction("Dashboard", "AdminFunction");
                         }
                         else
                         {
@@ -50,7 +50,7 @@ namespace Liberary_Management.Controllers
         }
 
         // GET: Dashboard
-        public ActionResult Dashboard ()
+        public ActionResult Dashboard()
         {
             return View("Dashboard");
         }
@@ -77,7 +77,7 @@ namespace Liberary_Management.Controllers
         }
 
         // POST: Add book copy to database
-        public ActionResult AddBookCopy(string isbn, string title, string publisher,string author, string publicationDate, string branch, string position)
+        public ActionResult AddBookCopy(string isbn, string title, string publisher, string author, string publicationDate, string branch, string position)
         {
             bool isSucessfull = false;
             try
@@ -95,6 +95,48 @@ namespace Liberary_Management.Controllers
         }
 
         // GET: Top 10 Borrower
+        public ActionResult Top10MostBorrower()
+        {
+            try
+            {
+                using (var context = new LiberaryManagementEntities())
+                {
+                    ViewBag.BranchList = context.branch.ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error found at Top10MostBorrower.\n {e.Message}");
+            }
+
+            return PartialView("Top10MostBorrower");
+        }
+
+        public ActionResult Top10BrrowerList(int? branchid)
+        {
+            var top10BrrowerList = new List<Top10BorrowerViewModel>();
+            try
+            {
+                using (var context = new LiberaryManagementEntities())
+                {
+                    var top10Borrower = context.SP_Top10Borrower(branchid).ToList();
+                    foreach (var item in top10Borrower)
+                    {
+                        top10BrrowerList.Add(new Top10BorrowerViewModel
+                        {
+                            readerName = item.ReaderName,
+                            totalBook = item.TotalBook
+                        });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error found at Top10BrrowerList. \n{e.Message}");
+            }
+
+            return Json(top10BrrowerList, JsonRequestBehavior.AllowGet);
+        }
 
         // GET: AdminFunction/Details/5
         public ActionResult Details(int id)
@@ -124,48 +166,32 @@ namespace Liberary_Management.Controllers
             }
         }
 
-        // GET: AdminFunction/Edit/5
-        public ActionResult Edit(int id)
+        // GET: Branch Location
+        public ActionResult BranchLocation()
         {
-            return View();
-        }
-
-        // POST: AdminFunction/Edit/5
-        [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
-        {
+            var branches = new List<BranchViewModel>();
             try
             {
-                // TODO: Add update logic here
+                using (var context = new LiberaryManagementEntities())
+                {
+                    var dbBranches = context.branch.ToList();
+                    foreach (var item in dbBranches)
+                    {
+                        branches.Add(new BranchViewModel
+                        {
+                            BrnahcId = item.branchid,
+                            Name = item.name,
+                            Location = item.location
+                        });
+                    }
 
-                return RedirectToAction("Index");
+                }
             }
-            catch
+            catch (Exception e)
             {
-                return View();
+                Console.WriteLine($"Error found in BranchLocation: \n{e.Message}");
             }
-        }
-
-        // GET: AdminFunction/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: AdminFunction/Delete/5
-        [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add delete logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            return PartialView("BranchLocation", branches);
         }
     }
 }

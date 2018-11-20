@@ -133,6 +133,9 @@
           <Parameter Name="branchid" Type="varchar(max)" Mode="In" />
           <Parameter Name="position" Type="varchar(max)" Mode="In" />
         </Function>
+        <Function Name="SP_Top10Borrower" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="brnachid" Type="int" Mode="In" />
+        </Function>
         <EntityContainer Name="LiberaryManagementModelStoreContainer">
           <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="author" EntityType="Self.author" Schema="dbo" store:Type="Tables" />
@@ -234,6 +237,9 @@
             <End Role="branch" EntitySet="branch" />
             <End Role="bookinfo" EntitySet="bookinfo" />
           </AssociationSet>
+          <FunctionImport Name="SP_Top10Borrower" ReturnType="Collection(LiberaryManagementModel.SP_Top10Borrower_Result)">
+            <Parameter Name="brnachid" Mode="In" Type="Int32" />
+          </FunctionImport>
         </EntityContainer>
         <EntityType Name="admin">
           <Key>
@@ -395,6 +401,10 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="SP_Top10Borrower_Result">
+          <Property Type="String" Name="ReaderName" Nullable="true" MaxLength="20" />
+          <Property Type="Int32" Name="TotalBook" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -532,6 +542,14 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="SP_Top10Borrower" FunctionName="LiberaryManagementModel.Store.SP_Top10Borrower">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LiberaryManagementModel.SP_Top10Borrower_Result">
+                <ScalarProperty Name="ReaderName" ColumnName="ReaderName" />
+                <ScalarProperty Name="TotalBook" ColumnName="TotalBook" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
