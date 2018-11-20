@@ -48,15 +48,15 @@
     {
         foreach (var item in ViewBag.Isbn)
         {
-            isbn.Add(new SelectListItem { Text = item.isbn, Value = item.isbn});
+            isbn.Add(new SelectListItem { Text = item.isbn, Value = item.isbn });
         }
     }
 }
 
-<form action="/action_page.php">
+<form>
     <div class="form-group">
         <label for="isbn">ISBN:</label>
-        <input type="text" class="form-control" id="txtIsbn" placeholder="ISBN" name="isbn">
+        @Html.DropDownList("isbn", isbn, new { @id = "drpIsbn", @class = "form-control" })
     </div>
     <div class="form-group">
         <label for="title">Title:</label>
@@ -84,3 +84,37 @@
     </div>
     <button type="submit" class="btn btn-default" id="btnSaveBooks">Save New Book</button>
 </form>
+
+<script>
+    $('#btnSaveBooks').click(function () {
+        debugger;
+        var varIsbn = $('#drpIsbn').val();
+        var varTitle = $('#txtTitle').val();
+        var varPublisher = $('#drpPublisher').val();
+        var varAuthor = $('#drpAuthor').val();
+        var varPublicationDate = $('#dtPublicationDate').val();
+        var varBranch = $('#drpBranch').val();
+        var varPosition = $('#drpPosition').val();
+
+        var data = {
+            isbn: varIsbn
+            ,title: varTitle
+            ,publisher: varPublisher
+            ,author: varAuthor
+            ,publicationDate: varPublicationDate
+            ,branch: varBranch
+            ,position: varPosition
+        }
+
+        var callbackSuccess = function (response) {
+            alert(`Book has inserted Successfully. ${response}`);
+        }
+
+        var callbackError = function (x, y, z) {
+            console.error(`Error found in $('#btnSaveBooks').click(function (){}); : \n ${x} \n ${y} \n ${z}`);
+        }
+
+        var siteUrl = "@Url.Action("AddBookCopy", "AdminFunction")";
+        ajaxPOST(siteUrl, data, callbackSuccess, 'Admin Function', callbackError);
+    });
+</script>

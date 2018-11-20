@@ -62,8 +62,7 @@ namespace Liberary_Management.Controllers
             {
                 using (var context = new LiberaryManagementEntities())
                 {
-                    ViewBag.Isbn = context.book.Select(x => x.isbn).ToList();
-
+                    ViewBag.Isbn = context.book.ToList();
                     ViewBag.Publisher = context.publisher.ToList();
                     ViewBag.Author = context.author.ToList();
                     ViewBag.Branch = context.branch.ToList();
@@ -78,7 +77,24 @@ namespace Liberary_Management.Controllers
         }
 
         // POST: Add book copy to database
-        //public ActionResult AddBookCopy ()
+        public ActionResult AddBookCopy(string isbn, string title, string publisher,string author, string publicationDate, string branch, string position)
+        {
+            bool isSucessfull = false;
+            try
+            {
+                using (var context = new LiberaryManagementEntities())
+                {
+                    var temp = context.SP_InsertBookCopy(isbn, title, publisher, author, publicationDate, branch, position);
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+            return Json(isSucessfull, JsonRequestBehavior.AllowGet);
+        }
+
+        // GET: Top 10 Borrower
 
         // GET: AdminFunction/Details/5
         public ActionResult Details(int id)
