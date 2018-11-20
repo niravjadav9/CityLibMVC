@@ -14,14 +14,16 @@
     <button class="btn btn-link linkBtn" id="btnSearchBook" onclick="BtnOnClick(this.id)">Search Book</button>
     <button class="btn btn-link linkBtn" id="btnBookCheckout" onclick="BtnOnClick(this.id)">Book Checkout</button>
     <button class="btn btn-link linkBtn" id="btnBookReturn" onclick="BtnOnClick(this.id)">Book Return</button>
-    <button class="btn btn-link linkBtn" id="btnBookCheckout" onclick="BtnOnClick(this.id)">Book reserve</button>
+    <button class="btn btn-link linkBtn" id="btnBookReserve" onclick="BtnOnClick(this.id)">Book Reserve</button>
     <button class="btn btn-link linkBtn" id="btnComputeFine" onclick="BtnOnClick(this.id)">Compute Fine</button>
     <button class="btn btn-link linkBtn" id="btnBookCheckout" onclick="BtnOnClick(this.id)">Book Checkout</button>
     <button class="btn btn-link linkBtn" id="btnPrintBookList" onclick="BtnOnClick(this.id)">Print book list</button>
 </div>
 <div class="main">
     <h2 id="userMsg"></h2>
+    <input type="hidden" id="hfReaderId" value="" />
     <div id="mainContent">
+
         
     </div>
 </div>
@@ -36,6 +38,7 @@
 
         function callbackSuccess(response) {
             if (response.readerid) {
+                $("#hfReaderId").val(response.readerid);
                 checkValidUser(true);
                 $('#userMsg').html(`Hey, ${response.name}.`);
             } else {
@@ -71,6 +74,10 @@
 
             case "btnBookCheckout":
                 siteURL = "@Url.Action("BookCheckout", "ReaderFunction")";
+                break;
+
+            case "btnBookReserve":
+                siteURL = "@Url.Action("BookReserve", "ReaderFunction")";
                 break;
         }
 

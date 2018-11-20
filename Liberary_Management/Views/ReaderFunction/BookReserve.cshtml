@@ -1,0 +1,108 @@
+﻿
+
+
+
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="control-label col-sm-2">Branch</label>
+        <div class="col-sm-3">
+            @Html.DropDownList("drpBranch", (IEnumerable<SelectListItem>)ViewBag.BranchList, new { @class = "form-control", @id = "drpBranch" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-sm-2">Book Name</label>
+        <div class="col-sm-3">
+            <select name="drpBook" id="drpBook" class="form-control">
+                <option value="0">Select Book Name</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-sm-2"></div>
+        <div class="col-sm-3">
+            <input type="button" class="btn btn-default" value="Submit" id="btnReserve" onclick="ReserveBook();" />
+        </div>
+    </div>
+
+    <script>
+        $("#drpBranch").on("change", function () {
+            var selectedBranch = $(this).val();
+            $("#drpBook").html("");
+            if (selectedBranch != "" && selectedBranch != "0") {
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GetBooksByBranch","ReaderFunction")',
+                    data: JSON.stringify({ "BranchId": selectedBranch }),
+                    dataType: "json",
+                    contentType: "application/json; charset=utf-8",
+                    success: function (data) {
+                        //console.log(data);
+                        if (typeof data !== 'undefined' && data.length > 0) {
+                            for (var i = 0; i < data.length; i++) {
+                                $('#drpBook').append($("<option></option>").attr("value", data[i].bookid).attr("data-isbn", data[i].isbn).text(data[i].title));
+                            }
+                        }
+                        else {
+                            $('#drpBook').append($("<option></option>").attr("value", "0").text("No books found!"));
+                            alert("No books found!");
+                        }
+                    },
+                    error: function () {
+                        alert("Error while get books");
+                    }
+                });
+            }
+            else {
+                $('#drpBook').append($("<option></option>").attr("value", "0").text("Select Book Name"));
+            }
+        });
+
+        function ReserveBook() {
+            var selectedBranch = $("#drpBranch").val();
+            var selectedBook = $("#drpBook").val();
+            var selectedBookIsbn = $("#drpBook option:selected").data("isbn");
+            if (selectedBranch != "" && selectedBranch != "0") {
+                if (selectedBook != "" && selectedBook != "0") {
+                    console.log($("#hfReaderId").val())
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("ReserveBook","ReaderFunction")',
+                        data: JSON.stringify({ "BranchId": selectedBranch, "BookId": selectedBook, "ISBN": selectedBookIsbn, "ReaderId": $("#hfReaderId").val()}),
+                        dataType: "json",
+                        contentType: "application/json; charset=utf-8",
+                        success: function (data) {
+                            alert(data);
+
+                        },
+                        error: function () {
+                            alert("Error while reserve book");
+                        }
+                    });
+                }
+                else {
+                    alert("Please select book name");
+                }
+            }
+            else {
+                alert("Please select branch name");
+            }
+        }
+    </script>
+
+    @*<div class="col-sm-2">
+            <label for="from">Branch</label>
+        </div>
+        <div class="col-xs-3">
+
+        </div>
+        <div class="col-xs-3">
+            <p class="input-group">
+                <input type="text" name="txtSearch" id="txtSearch" />
+            </p>
+        </div>
+        <div class="col-xs-1 text-center">
+            <input type="button" class="btn btn-default" value="Search" id="btnSearchBooks" />
+        </div>*@
+</div>
