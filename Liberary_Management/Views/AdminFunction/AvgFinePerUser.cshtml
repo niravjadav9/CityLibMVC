@@ -25,21 +25,19 @@
     <table id="tblDisplayResult" class="table table-striped">
         <thead>
             <tr>
-                <th>Book Count</th>
-                <th>Book ID</th>
-                <th>Book Name</th>
+                <th>Name</th>
+                <th>Avg Fine</th>
             </tr>
         </thead>
         <tbody></tbody>
     </table>
 </div>
 
-
 <script>
     $("#drpBranches").change(function () {
         var branchId = parseInt($(this).val());
-        var siteURL = "@Url.Action("Top10BrrowedBookList", "AdminFunction")";
-        var strData = { branchid: branchId };
+        var siteURL = "@Url.Action("FindAvgFinePerUser", "AdminFunction")";
+        var strData = { branchId: branchId };
 
         function callbackSuccess(response) {
             debugger;
@@ -50,9 +48,8 @@
             if (typeof data !== 'undefined' && data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
                     x += "<tr>";
-                    x += "<td>" + data[i].BookCount + "</td>";
-                    x += "<td>" + data[i].BookId + "</td>";
-                    x += "<td>" + data[i].BookName + "</td>";
+                    x += "<td>" + data[i].Name + "</td>";
+                    x += "<td>" + data[i].AvgFine + "</td>";
                     x += "</tr>";
                 }
                 $("#tblDisplayResult tbody").html(x);

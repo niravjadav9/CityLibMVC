@@ -28,7 +28,17 @@
 
 <div class="row" id="divResult">
     <table class="table table-condensed" id="tblSearchResult">
+        <thead>
+            <th>Book Id</th>
+            <th>ISBN</th>
+            <th>Book Title</th>
+            <th>Author Name</th>
+            <th>Publisher Name</th>
+            <th>Publish Date</th>
+        </thead>
+        <tbody>
 
+        </tbody>
     </table>
 </div>
 
@@ -38,36 +48,36 @@
         var searchValue = $('#txtSearch').val();
         var strData = { option: optionValue, data: searchValue };
         var siteURL = '@Url.Action("SearchByBook", "ReaderFunction")';
-        
-        callbackSuccess = function (response) {
-            debugger;
-            $('#tblSearchResult').html('');
-            if (response.length > 0) {
-                $(function () {
-                    var $th = $('<tr>').append(
-                        $('<th>').text('Book ID'),
-                        $('<th>').text('ISBN'),
-                        $('<th>').text('Book Title'),
-                        $('<th>').text('Author Name'),
-                        $('<th>').text('Publisher Name'),
-                        $('<th>').text('Publication Date'),
-                    ).appendTo('#tblSearchResult');
 
-                    $.each(response, function (i, item) {
-                        var $tr = $('<tr>').append(
-                            $('<td>').text(item.BookId),
-                            $('<td>').text(item.ISBN),
-                            $('<td>').text(item.BookTitle),
-                            $('<td>').text(item.AuthorName),
-                            $('<td>').text(item.PublisherName),
-                            $('<td>').text(item.PublicationDate)
-                        ).appendTo('#tblSearchResult');
-                    });
-                });
-            } else {
-                $(function () {
-                    $('#divResult').html('<h1>No Records Found!</h1>');
-                });
+        function parseJsonDate(jsonDateString) {
+            var tempDate = new Date(parseInt(jsonDateString.replace('/Date(', '')));
+            var month = ["Jan", "Feb", "Mar",
+                "Apr", "May", "Jun",
+                "Jul", "Aug", "Sep",
+                "Oct", "Nov", "Dec",];
+            return tempDate.getDate() + "/" + month[tempDate.getMonth()] + "/" + tempDate.getFullYear();
+        }
+
+        callbackSuccess = function (data) {
+            debugger;
+            $('#tblSearchResult tbody').html('');
+            var x = "";
+
+            if (typeof data !== 'undefined' && data.length > 0) {
+                for (var i = 0; i < data.length; i++) {
+                    x += "<tr>";
+                    x += "<td>" + data[i].BookId + "</td>";
+                    x += "<td>" + data[i].ISBN + "</td>";
+                    x += "<td>" + data[i].BookTitle + "</td>";
+                    x += "<td>" + data[i].AuthorName + "</td>";
+                    x += "<td>" + data[i].PublisherName + "</td>";
+                    x += "<td>" + parseJsonDate(data[i].PublicationDate) + "</td>";
+                    x += "</tr>";
+                }
+                $("#tblSearchResult tbody").html(x);
+            }
+            else {
+                $("#tblSearchResult tbody").html("<tr><td colspan='4' align='center'>No records found.</td></tr>");
             }
         }
 

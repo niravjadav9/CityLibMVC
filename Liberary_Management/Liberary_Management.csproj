@@ -193,6 +193,7 @@
     <Compile Include="Models\AddBookViewModel.cs" />
     <Compile Include="Models\AddReaderViewModel.cs" />
     <Compile Include="Models\AdminSearchBook.cs" />
+    <Compile Include="Models\AvgFinePerUserViewModel.cs" />
     <Compile Include="Models\BranchViewModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Models\Top10BorrowedBooksViewMode.cs" />
@@ -329,6 +330,7 @@
     <Content Include="Views\AdminFunction\Top10MostBorroweBooks.cshtml" />
     <Content Include="Views\AdminFunction\AddReader.cshtml" />
     <Content Include="Views\AdminFunction\SearchBook.cshtml" />
+    <Content Include="Views\AdminFunction\AvgFinePerUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

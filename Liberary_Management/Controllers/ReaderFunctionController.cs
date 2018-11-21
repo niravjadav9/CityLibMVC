@@ -65,14 +65,25 @@ namespace Liberary_Management.Controllers
         }
 
         [HttpPost]
-        public ActionResult SearchByBook(int option, string data)
+        public ActionResult SearchByBook(int? option, string data)
         {
-            List<SearchBookBy_Result> books = new List<SearchBookBy_Result>();
+            List<SearchBookBy1_Result> books = new List<SearchBookBy1_Result>();
             try
             {
                 using (var context = new LiberaryManagementEntities())
                 {
-                    books = context.SearchBookBy(option, data).ToList();
+                    var temp = context.SearchBookBy1(option, data).ToList();
+                    foreach (var item in temp)
+                    {
+                        books.Add(new SearchBookBy1_Result {
+                            AuthorName = item.AuthorName,
+                            BookId = item.BookId,
+                            BookTitle = item.BookTitle,
+                            ISBN = item.ISBN,
+                            PublicationDate = item.PublicationDate.Date,
+                            PublisherName = item.PublisherName
+                        });
+                    }
                 }
             }
             catch (Exception ex)

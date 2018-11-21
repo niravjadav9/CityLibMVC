@@ -11,6 +11,10 @@ namespace Liberary_Management.Controllers
         // GET: AdminFunction
         public ActionResult Index()
         {
+            if (TempData["msg"] != null && TempData["msg"].ToString().ToLower() == "user valid")
+            {
+                return RedirectToAction("Dashboard", "AdminFunction");
+            } 
             return View();
         }
 
@@ -27,6 +31,7 @@ namespace Liberary_Management.Controllers
                         adminUser = context.admin.Where(x => x.id == collection.Username && x.password == collection.Password).FirstOrDefault();
                         if (adminUser != null)
                         {
+                            TempData["msg"] = "User Valid";
                             return RedirectToAction("Dashboard", "AdminFunction");
                         }
                         else
@@ -81,6 +86,7 @@ namespace Liberary_Management.Controllers
         {
             string retVal = string.Empty;
             var bookinfo = new bookinfo();
+            var book = new book();
             try
             {
                 using (var context = new LiberaryManagementEntities())
@@ -96,7 +102,11 @@ namespace Liberary_Management.Controllers
                     context.bookinfo.Add(bookinfo);
                     int identity = context.SaveChanges();
 
-                    if (identity > 0)
+                    book.isbn = isbn;
+                    context.book.Add(book);
+                    int bookIdentity = context.SaveChanges();
+
+                    if (identity > 0 && bookIdentity > 0)
                     {
                         retVal = "Book Added Successfully";
                     }
@@ -276,6 +286,59 @@ namespace Liberary_Management.Controllers
             return Json(top10BrrowerList, JsonRequestBehavior.AllowGet);
         }
         
+        // GET: Avg fine per user
+        public ActionResult AvgFinePerUser ()
+        {
+            try
+            {
+                using (var context = new LiberaryManagementEntities())
+                {
+                    ViewBag.BranchList = context.branch.ToList();
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error found at AvgFinePerUser: {e.Message}");
+            }
+            return PartialView();
+        }
+
+        // GET: Avg fine per user -- Calculation
+        public ActionResult FindAvgFinePerUser(int branchId)
+        {
+            var list = new List<AvgFinePerUserViewModel>();
+
+            try
+            {
+                using (var context = new LiberaryManagementEntities())
+                {
+                    var tempList =
+                        from borrow in context.borrow
+                        join reader in context.reader on borrow.readerid equals reader.readerid
+                        where borrow.branchid == branchId
+                        group borrow by
+                        new { borrow.fine, reader.name } into grp
+                        select new {
+                            Name = grp.Key.name,
+                            Avg = grp.Average(x => x.fine)
+                        };
+                    foreach (var item in tempList.ToList())
+                    {
+                        list.Add(new AvgFinePerUserViewModel
+                        {
+                            Name = item.Name,
+                            AvgFine = item.Avg
+                        });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error found at AvgFinePerUser: {e.Message}");
+            }
+            return Json(list, JsonRequestBehavior.AllowGet);
+        }
+
         // GET: AdminFunction/Details/5
         public ActionResult Details(int id)
         {
