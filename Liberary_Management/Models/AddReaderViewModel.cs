@@ -23,5 +23,9 @@ namespace Liberary_Management.Models
         [Display(Name = "Phone")]
         [DataType(DataType.PhoneNumber)]
         public string phone { get; set; }
+
+        [Display(Name = "Email Id")]
+        [DataType(DataType.EmailAddress)]
+        public string emailid { get; set; }
     }
 }

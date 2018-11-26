@@ -18,5 +18,6 @@ namespace Liberary_Management
         public string name { get; set; }
         public string address { get; set; }
         public string phone { get; set; }
+        public string emailid { get; set; }
     }
 }

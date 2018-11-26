@@ -43,42 +43,38 @@
 </div>
 
 <script>
+    var dtTable;
+
+    $(document).ready(function () {
+        dtTable = $('#tblSearchResult').DataTable({
+            "data": [],
+            "columns": [
+                { "data": "BookId" },
+                { "data": "ISBN" },
+                { "data": "BookTitle" },
+                { "data": "AuthorName" },
+                { "data": "PublisherName" },
+                { "data": "PublicationDate" }
+            ]
+        });
+    });
+
     $('#btnSearchBooks').click(function () {
         var optionValue = $('#drpBookSearchOption').val();
         var searchValue = $('#txtSearch').val();
         var strData = { option: optionValue, data: searchValue };
         var siteURL = '@Url.Action("SearchByBook", "ReaderFunction")';
 
-        function parseJsonDate(jsonDateString) {
-            var tempDate = new Date(parseInt(jsonDateString.replace('/Date(', '')));
-            var month = ["Jan", "Feb", "Mar",
-                "Apr", "May", "Jun",
-                "Jul", "Aug", "Sep",
-                "Oct", "Nov", "Dec",];
-            return tempDate.getDate() + "/" + month[tempDate.getMonth()] + "/" + tempDate.getFullYear();
-        }
+        
 
         callbackSuccess = function (data) {
-            debugger;
-            $('#tblSearchResult tbody').html('');
-            var x = "";
-
-            if (typeof data !== 'undefined' && data.length > 0) {
+            if (typeof data !== "undefined" && data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
-                    x += "<tr>";
-                    x += "<td>" + data[i].BookId + "</td>";
-                    x += "<td>" + data[i].ISBN + "</td>";
-                    x += "<td>" + data[i].BookTitle + "</td>";
-                    x += "<td>" + data[i].AuthorName + "</td>";
-                    x += "<td>" + data[i].PublisherName + "</td>";
-                    x += "<td>" + parseJsonDate(data[i].PublicationDate) + "</td>";
-                    x += "</tr>";
+                    data[i].PublicationDate = parseJsonDate(data[i].PublicationDate)
                 }
-                $("#tblSearchResult tbody").html(x);
             }
-            else {
-                $("#tblSearchResult tbody").html("<tr><td colspan='4' align='center'>No records found.</td></tr>");
-            }
+            dtTable.clear().draw();
+            dtTable.rows.add(data).draw();
         }
 
         callbackError = function (response) {

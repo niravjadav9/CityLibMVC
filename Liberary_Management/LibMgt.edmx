@@ -26,9 +26,15 @@
           <Property Name="isbn" Type="varchar" MaxLength="11" Nullable="false" />
           <Property Name="bookid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'DB_A42D93_LibraryManagement.dbo.bookinfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="bookinfo">
           <Key>
             <PropertyRef Name="isbn" />
+            
+            
+            
+            
           </Key>
           <Property Name="isbn" Type="varchar" MaxLength="9" Nullable="false" />
           <Property Name="title" Type="varchar" MaxLength="45" Nullable="false" />
@@ -93,6 +99,7 @@
           <Property Name="name" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="address" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="phone" Type="varchar" MaxLength="12" Nullable="false" />
+          <Property Name="emailid" Type="varchar(max)" />
         </EntityType>
         <EntityType Name="reserve">
           <Key>
@@ -146,7 +153,6 @@
           <EntitySet Name="admin" EntityType="Self.admin" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="author" EntityType="Self.author" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="book" EntityType="Self.book" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="bookinfo" EntityType="Self.bookinfo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="borrow" EntityType="Self.borrow" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="branch" EntityType="Self.branch" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="copy" EntityType="Self.copy" Schema="dbo" store:Type="Tables" />
@@ -154,6 +160,17 @@
           <EntitySet Name="publisher" EntityType="Self.publisher" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="reader" EntityType="Self.reader" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="reserve" EntityType="Self.reserve" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="bookinfo" EntityType="Self.bookinfo" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [bookinfo].[isbn] AS [isbn], 
+    [bookinfo].[title] AS [title], 
+    [bookinfo].[publisherid] AS [publisherid], 
+    [bookinfo].[publicationdate] AS [publicationdate], 
+    [bookinfo].[authorid] AS [authorid], 
+    [bookinfo].[branchid] AS [branchid], 
+    [bookinfo].[position] AS [position]
+    FROM [dbo].[bookinfo] AS [bookinfo]</DefiningQuery>
+          </EntitySet>
           <AssociationSet Name="FK_BOOKINFO_BRANCH" Association="Self.FK_BOOKINFO_BRANCH">
             <End Role="branch" EntitySet="branch" />
             <End Role="bookinfo" EntitySet="bookinfo" />
@@ -250,7 +267,7 @@
           <Parameter Name="branchid" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="SP_SearchBookAdminSide" ReturnType="Collection(LiberaryManagementModel.SP_SearchBookAdminSide_Result)">
-            <Parameter Name="bookname" Mode="In" Type="String" />
+          <Parameter Name="bookname" Mode="In" Type="String" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="admin">
@@ -330,6 +347,7 @@
           <Property Name="name" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="false" />
           <Property Name="address" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="false" />
           <Property Name="phone" Type="String" Nullable="false" MaxLength="12" FixedLength="false" Unicode="false" />
+          <Property Name="emailid" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="reserve">
           <Key>
@@ -508,6 +526,7 @@
           <EntitySetMapping Name="reader">
             <EntityTypeMapping TypeName="LiberaryManagementModel.reader">
               <MappingFragment StoreEntitySet="reader">
+                <ScalarProperty Name="emailid" ColumnName="emailid" />
                 <ScalarProperty Name="phone" ColumnName="phone" />
                 <ScalarProperty Name="address" ColumnName="address" />
                 <ScalarProperty Name="name" ColumnName="name" />

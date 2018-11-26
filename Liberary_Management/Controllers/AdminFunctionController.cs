@@ -2,6 +2,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Web.Mvc;
 
 namespace Liberary_Management.Controllers
@@ -11,10 +13,11 @@ namespace Liberary_Management.Controllers
         // GET: AdminFunction
         public ActionResult Index()
         {
-            if (TempData["msg"] != null && TempData["msg"].ToString().ToLower() == "user valid")
+            if (TempData["msg"]?.ToString().ToLower() == "uservalid")
             {
                 return RedirectToAction("Dashboard", "AdminFunction");
-            } 
+            }
+
             return View();
         }
 
@@ -31,7 +34,7 @@ namespace Liberary_Management.Controllers
                         adminUser = context.admin.Where(x => x.id == collection.Username && x.password == collection.Password).FirstOrDefault();
                         if (adminUser != null)
                         {
-                            TempData["msg"] = "User Valid";
+                            TempData["msg"] = "UserValid";
                             return RedirectToAction("Dashboard", "AdminFunction");
                         }
                         else
@@ -168,7 +171,7 @@ namespace Liberary_Management.Controllers
         }
 
         // GET: Top 10 Borrowed Books
-        public ActionResult Top10MostBorroweBooks ()
+        public ActionResult Top10MostBorroweBooks()
         {
             //Top10BorrowedBooks
             try
@@ -221,33 +224,43 @@ namespace Liberary_Management.Controllers
 
         // POST: Add new reader post method
         [HttpPost]
-        public ActionResult AddReader(string name, string address, string phone)
+        public ActionResult AddReader(string name, string address, string phone, string emailid)
         {
             string returnVal = string.Empty;
             var model = new reader();
-                try
+            try
+            {
+                using (var context = new LiberaryManagementEntities())
                 {
-                    using (var context = new LiberaryManagementEntities())
-                    {
-                        model.name = name;
-                        model.address = address;
-                        model.phone = phone;
+                    model.name = name;
+                    model.address = address;
+                    model.phone = phone;
+                    model.emailid = emailid;
 
-                        context.reader.Add(model);
-                        var identity = context.SaveChanges();
-                        if (identity > 0)
+                    context.reader.Add(model);
+                    context.SaveChanges();
+                    var identity = model.readerid;
+                    if (identity > 0)
+                    {
+                        bool isMailSent = AdminFunctionController.EmailSend(emailid, name, identity.ToString());
+                        if (isMailSent)
                         {
-                            returnVal = "User Added successfully.";
+                            returnVal = $"Reader Added successfully with Reader ID \"{identity}\". ";
                         } else
                         {
-                            returnVal = "Something went wrong. Please try again later.";
+                            returnVal = "User Added successfully. But there has been some problem with Email. Please check internet connection.";
                         }
                     }
+                    else
+                    {
+                        returnVal = "Something went wrong. Please try again later.";
+                    }
                 }
-                catch (Exception e)
-                {
-                    returnVal = "Something went wrong. Please try again later.";
-                }
+            }
+            catch (Exception e)
+            {
+                returnVal = "Something went wrong. Please try again later.";
+            }
 
             return Json(returnVal, JsonRequestBehavior.AllowGet);
         }
@@ -285,9 +298,9 @@ namespace Liberary_Management.Controllers
 
             return Json(top10BrrowerList, JsonRequestBehavior.AllowGet);
         }
-        
+
         // GET: Avg fine per user
-        public ActionResult AvgFinePerUser ()
+        public ActionResult AvgFinePerUser()
         {
             try
             {
@@ -318,7 +331,8 @@ namespace Liberary_Management.Controllers
                         where borrow.branchid == branchId
                         group borrow by
                         new { borrow.fine, reader.name } into grp
-                        select new {
+                        select new
+                        {
                             Name = grp.Key.name,
                             Avg = grp.Average(x => x.fine)
                         };
@@ -393,6 +407,33 @@ namespace Liberary_Management.Controllers
                 Console.WriteLine($"Error found in BranchLocation: \n{e.Message}");
             }
             return PartialView("BranchLocation", branches);
+        }
+
+        public static bool EmailSend(string recipientId, string recipientName, string readerId)
+        {
+            bool isMailSent = false;
+            try
+            {
+                SmtpClient mailClient = new SmtpClient("smtp.gmail.com", 587);
+                mailClient.UseDefaultCredentials = false;
+                mailClient.EnableSsl = true;
+                mailClient.Credentials = new NetworkCredential("citylib2611@gmail.com", "nirav2611");
+
+                MailMessage mailMessage = new MailMessage();
+                mailMessage.From = new MailAddress("admin@citylibrary.com");
+                mailMessage.To.Add(recipientId);
+                mailMessage.Body = $"Hello {recipientName}, \n\nYour Account is successfully created. Now you can enjoy our facility.\n\n-Regards\nCity Library (Admin)";
+                //mailMessage.Attachments.Add(new Attachment("/path/to/your/attatchment/file.jpg"));
+                mailMessage.Subject = $"{readerId} - City Library Reader ID.";
+
+                mailClient.Send(mailMessage);
+                isMailSent = true;
+            }
+            catch (System.Exception ex)
+            {
+                isMailSent = false;
+            }
+            return isMailSent;
         }
     }
 }

@@ -11,6 +11,10 @@ namespace Liberary_Management.Controllers
         // GET: ReaderFunction
         public ActionResult Index()
         {
+            if (TempData["Reader"] != null && TempData["Reader"].ToString().ToLower() == "readervalid")
+            {
+                
+            }
             return View();
         }
 
@@ -28,6 +32,7 @@ namespace Liberary_Management.Controllers
                         if (userValid != null)
                         {
                             user = userValid;
+                            TempData["Reader"] = "ReaderValid";
                         }
                     }
                 }
@@ -343,6 +348,14 @@ namespace Liberary_Management.Controllers
                              }).Distinct().ToList();
                 return Json(query, JsonRequestBehavior.AllowGet);
             }
+        }
+
+        /// <summary>
+        /// Reader will get Logout.
+        /// </summary>
+        public void ReaderLogout()
+        {
+            RedirectToAction("Index", "Home");
         }
     }
 }

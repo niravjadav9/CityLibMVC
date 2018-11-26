@@ -8,14 +8,23 @@
 </div>
 
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-5">
         <h2>Reader Part</h2>
         <p>
             Reader can find the book, borrow it and some more functionalities are avialble.
         </p>
+        <p class="pull-right">
+            <h3>@Html.ActionLink("Reader Function", "Index", "ReaderFunction")</h3>
+        </p>
     </div>
-    <div class="col-md-6">
+    <div class="col-md-2">
+
+    </div>
+    <div class="col-md-5">
         <h2>Admin part</h2>
         <p>Admin can Add reader, books and other functionalities fall under admin part.</p>
+        <p class="pull-right">
+            <h3>@Html.ActionLink("Admin", "Index", "AdminFunction")</h3>
+        </p>
     </div>
 </div>
