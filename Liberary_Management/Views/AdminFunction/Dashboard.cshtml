@@ -10,13 +10,14 @@
 </style>
 
 <div class="sidenav" id="readerLeftMenu">
-    <button class="btn btn-link linkBtn" id="btnAddBook" onclick="BtnOnClick(this.id)">Add Book</button>
-    <button class="btn btn-link linkBtn" id="btnSearchBook" onclick="BtnOnClick(this.id)">Search Book</button>
-    <button class="btn btn-link linkBtn" id="btnAddReader" onclick="BtnOnClick(this.id)">Add New Reader</button>
-    <button class="btn btn-link linkBtn" id="btnBranchInfo" onclick="BtnOnClick(this.id)">Branch Information</button>
-    <button class="btn btn-link linkBtn" id="btnTop10Borrower" onclick="BtnOnClick(this.id)">Top 10 Borrower</button>
-    <button class="btn btn-link linkBtn" id="btnTop10Books" onclick="BtnOnClick(this.id)">Top 10 most Borrowed Books</button>
-    <button class="btn btn-link linkBtn" id="btnAvgFine" onclick="BtnOnClick(this.id)">Avg Fine per Reader</button>
+    <button class="btn btn-link" id="btnAddBook" onclick="BtnOnClick(this.id)">Add Book</button>
+    <button class="btn btn-link" id="btnSearchBook" onclick="BtnOnClick(this.id)">Search Book</button>
+    <button class="btn btn-link" id="btnAddReader" onclick="BtnOnClick(this.id)">Add New Reader</button>
+    <button class="btn btn-link" id="btnBranchInfo" onclick="BtnOnClick(this.id)">Branch Information</button>
+    <button class="btn btn-link" id="btnTop10Borrower" onclick="BtnOnClick(this.id)">Top 10 Borrower</button>
+    <button class="btn btn-link" id="btnTop10Books" onclick="BtnOnClick(this.id)">Top 10 Borrowed Books</button>
+    <button class="btn btn-link" id="btnAvgFine" onclick="BtnOnClick(this.id)">Avg Fine per Reader</button>
+    <button class="btn btn-link" id="btnLogout" onclick="BtnOnClick(this.id)">Logout</button>
 </div>
 <div class="main">
     <h2 id="userMsg"></h2>
@@ -67,6 +68,10 @@
 
             case "btnAvgFine":
                 siteURL = "@Url.Action("AvgFinePerUser", "AdminFunction")";
+                break;
+
+            case "btnLogout":
+                siteURL = "@Url.Action("AdminLogout", "AdminFunction")";
                 break;
 
             default:

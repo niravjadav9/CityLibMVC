@@ -9,16 +9,17 @@
     z-index: 1;
     top: 0;
     left: 0;
-    background-color: #111;
+    background-color: #283744 !important;
+    color: white !important;
     overflow-x: hidden;
     padding-top: 50px;
 }
 
-    .sidenav a{
+    .sidenav a {
         padding: 6px 8px 6px 16px;
         text-decoration: none;
         font-size: 16px;
-        color: #818181;
+        color: white !important;
         display: block;
     }
 
@@ -26,7 +27,7 @@
         padding: 6px 8px 6px 16px;
         text-decoration: none;
         font-size: 16px;
-        color: #818181;
+        color: white !important;
         display: block;
     }
 

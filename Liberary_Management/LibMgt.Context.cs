@@ -286,5 +286,14 @@ namespace Liberary_Management
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_SearchBookAdminSide_Result>("SP_SearchBookAdminSide", booknameParameter);
         }
+    
+        public virtual ObjectResult<SP_AvgFinePerReader_Result> SP_AvgFinePerReader(Nullable<int> readerid)
+        {
+            var readeridParameter = readerid.HasValue ?
+                new ObjectParameter("readerid", readerid) :
+                new ObjectParameter("readerid", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<SP_AvgFinePerReader_Result>("SP_AvgFinePerReader", readeridParameter);
+        }
     }
 }

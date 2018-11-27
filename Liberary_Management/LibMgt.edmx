@@ -127,6 +127,9 @@ warning 6002: The table/view 'DB_A42D93_LibraryManagement.dbo.bookinfo' does not
           <Parameter Name="option" Type="int" Mode="In" />
           <Parameter Name="searchData" Type="varchar(max)" Mode="In" />
         </Function>
+        <Function Name="SP_AvgFinePerReader" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="readerid" Type="int" Mode="In" />
+        </Function>
         <Function Name="SP_GetBookCopyForAdmin" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="option" Type="int" Mode="In" />
           <Parameter Name="searchValue" Type="varchar(max)" Mode="In" />
@@ -268,6 +271,9 @@ warning 6002: The table/view 'DB_A42D93_LibraryManagement.dbo.bookinfo' does not
           </FunctionImport>
           <FunctionImport Name="SP_SearchBookAdminSide" ReturnType="Collection(LiberaryManagementModel.SP_SearchBookAdminSide_Result)">
           <Parameter Name="bookname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="SP_AvgFinePerReader" ReturnType="Collection(LiberaryManagementModel.SP_AvgFinePerReader_Result)">
+            <Parameter Name="readerid" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <EntityType Name="admin">
@@ -445,6 +451,11 @@ warning 6002: The table/view 'DB_A42D93_LibraryManagement.dbo.bookinfo' does not
           <Property Type="Int32" Name="bookid" Nullable="false" />
           <Property Type="String" Name="isbn" Nullable="false" MaxLength="11" />
         </ComplexType>
+        <ComplexType Name="SP_AvgFinePerReader_Result">
+          <Property Type="Int32" Name="NumberOfCount" Nullable="true" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="20" />
+          <Property Type="Double" Name="AvgFine" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -606,6 +617,15 @@ warning 6002: The table/view 'DB_A42D93_LibraryManagement.dbo.bookinfo' does not
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="bookid" ColumnName="bookid" />
                 <ScalarProperty Name="isbn" ColumnName="isbn" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="SP_AvgFinePerReader" FunctionName="LiberaryManagementModel.Store.SP_AvgFinePerReader">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="LiberaryManagementModel.SP_AvgFinePerReader_Result">
+                <ScalarProperty Name="NumberOfCount" ColumnName="NumberOfCount" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="AvgFine" ColumnName="AvgFine" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

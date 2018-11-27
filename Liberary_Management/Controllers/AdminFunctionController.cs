@@ -306,7 +306,7 @@ namespace Liberary_Management.Controllers
             {
                 using (var context = new LiberaryManagementEntities())
                 {
-                    ViewBag.BranchList = context.branch.ToList();
+                    ViewBag.ReaderList = context.reader.ToList();
                 }
             }
             catch (Exception e)
@@ -317,33 +317,15 @@ namespace Liberary_Management.Controllers
         }
 
         // GET: Avg fine per user -- Calculation
-        public ActionResult FindAvgFinePerUser(int branchId)
+        public ActionResult FindAvgFinePerUser(int? readerid)
         {
-            var list = new List<AvgFinePerUserViewModel>();
+            var list = new List<SP_AvgFinePerReader_Result>();
 
             try
             {
                 using (var context = new LiberaryManagementEntities())
                 {
-                    var tempList =
-                        from borrow in context.borrow
-                        join reader in context.reader on borrow.readerid equals reader.readerid
-                        where borrow.branchid == branchId
-                        group borrow by
-                        new { borrow.fine, reader.name } into grp
-                        select new
-                        {
-                            Name = grp.Key.name,
-                            Avg = grp.Average(x => x.fine)
-                        };
-                    foreach (var item in tempList.ToList())
-                    {
-                        list.Add(new AvgFinePerUserViewModel
-                        {
-                            Name = item.Name,
-                            AvgFine = item.Avg
-                        });
-                    }
+                    list = context.SP_AvgFinePerReader(readerid).ToList();
                 }
             }
             catch (Exception e)
@@ -351,34 +333,6 @@ namespace Liberary_Management.Controllers
                 Console.WriteLine($"Error found at AvgFinePerUser: {e.Message}");
             }
             return Json(list, JsonRequestBehavior.AllowGet);
-        }
-
-        // GET: AdminFunction/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
-
-        // GET: AdminFunction/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: AdminFunction/Create
-        [HttpPost]
-        public ActionResult Create(FormCollection collection)
-        {
-            try
-            {
-                // TODO: Add insert logic here
-
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
         }
 
         // GET: Branch Location
@@ -407,6 +361,12 @@ namespace Liberary_Management.Controllers
                 Console.WriteLine($"Error found in BranchLocation: \n{e.Message}");
             }
             return PartialView("BranchLocation", branches);
+        }
+
+        public ActionResult AdminLogout ()
+        {
+            TempData["msg"] = string.Empty;
+            return RedirectToAction("Index", "Home");
         }
 
         public static bool EmailSend(string recipientId, string recipientName, string readerId)

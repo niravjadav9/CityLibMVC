@@ -3,12 +3,12 @@
     var branchList = new List<SelectListItem>();
     //var item = new List<Liberary_Management.Models.Top10BorrowerViewModel>();
 
-    foreach (var item in ViewBag.BranchList)
+    foreach (var item in ViewBag.ReaderList)
     {
         branchList.Add(new SelectListItem
         {
             Text = item.name,
-            Value = item.branchid.ToString()
+            Value = item.readerid.ToString()
         });
     }
 }
@@ -16,8 +16,8 @@
 
 <div class="row">
     <div class="form-group">
-        <label for="Branch">Branches: </label>
-        @Html.DropDownList("Branch", branchList, new { @id = "drpBranches", @class = "form-control" })
+        <label for="Branch">Reader: </label>
+        @Html.DropDownList("Reader", branchList, new { @id = "drpReaders", @class = "form-control" })
     </div>
 </div>
 
@@ -25,6 +25,7 @@
     <table id="tblDisplayResult" class="table table-striped">
         <thead>
             <tr>
+                <th>Total Books</th>
                 <th>Name</th>
                 <th>Avg Fine</th>
             </tr>
@@ -34,13 +35,12 @@
 </div>
 
 <script>
-    $("#drpBranches").change(function () {
-        var branchId = parseInt($(this).val());
+    $("#drpReaders").change(function () {
+        var readerId = parseInt($(this).val());
         var siteURL = "@Url.Action("FindAvgFinePerUser", "AdminFunction")";
-        var strData = { branchId: branchId };
+        var strData = { readerid: readerId };
 
         function callbackSuccess(response) {
-            debugger;
             var x = "";
             $('#tblDisplayResult tbody').html('');
             var data = JSON.parse(response);
@@ -48,7 +48,8 @@
             if (typeof data !== 'undefined' && data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
                     x += "<tr>";
-                    x += "<td>" + data[i].Name + "</td>";
+                    x += "<td>" + data[i].NumberOfCount + "</td>";
+                    x += "<td>" + data[i].name + "</td>";
                     x += "<td>" + data[i].AvgFine + "</td>";
                     x += "</tr>";
                 }

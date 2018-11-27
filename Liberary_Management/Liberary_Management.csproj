@@ -214,6 +214,9 @@
     <Compile Include="SearchBookBy_Result.cs">
       <DependentUpon>LibMgt.tt</DependentUpon>
     </Compile>
+    <Compile Include="SP_AvgFinePerReader_Result.cs">
+      <DependentUpon>LibMgt.tt</DependentUpon>
+    </Compile>
     <Compile Include="SP_GetBookCopyForAdmin1_Result.cs">
       <DependentUpon>LibMgt.tt</DependentUpon>
     </Compile>
